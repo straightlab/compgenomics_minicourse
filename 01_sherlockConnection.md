@@ -1,148 +1,130 @@
 # Connection to Sherlock and familiarization with the linux shell 
 
-We will do all of our bioinformatics analysis on the Stanford High Performance Computer Cluster Sherlock. This requires basic knowledge of the linux bash shell. In this part, we will 
-- connect to the cluster
+We will do all of our bioinformatics analysis on the Stanford High Performance Computer Cluster Sherlock (www.sherlock.stanford.edu). In this part, we will illustrate the basic workflow for connecting to the cluster and getting everything ready for a computational project. The steps are:
+- ssh into to the cluster
 - setup up our working directory
-- download some external sequencing dataset
-- do some very basic qc on this dataset and learn some of the most useful linux commands along the way! 
+- create a persistent session on the cluster to come back to 
+- request computational resources
+- load necessary packgages
 
-At the end of this notebook you will have had a glimpse at how to :
-- navigate the linux filesystem with `ls, cd, mkdir`
-- use basic commands to view files `cat`,`head` and `less`
-- use `wc` to count lines and very sample `awk` scripts to perform line by line operations on a file
-- use `sort` and `uniq` to create histograms
-- run a command line program such as `fastqc` to process the data in some manner
-- download data back from Sherlock to your local machine with `rsync`
+
+At the end of this notebook you will know how to :
+- navigate the linux filesystem with `ls`, `cd`, `mkdir`, `pwd`
+- set up a nicely organized folder for the project
+- use a Gnu Screen session
+- use SLURM to access to computational resources
 
 
 ## Connection to Sherlock
-In your browser go to `login.sherlock.stanford.edu`, then click on `>Shell`
+In your browser go to <login.sherlock.stanford.edu> , then click on `>Shell`
 Alternatively, you can ssh into sherlock using a terminal app on your computer. On a Mac, you can use the native terminal app Term. Open up Term (Command-space term), then
-`ssh <username>@login.sherlock.stanford.edu`
+```
+ssh <username>@login.sherlock.stanford.edu
+```
+
 
 ## Setting up our workspace for the project.
 Go to the bootcamp directory
 ```
-cd $SCRATCH/bootcamp2020
+cd $PI_SCRATCH/bootcamp2020
 ```
-Note that $SCRATCH is a bash variable, which contains the path to a default "scratch" folder for our lab. You can see the content of this variable with
+Note that `$PI_SCRATCH` is a bash variable, which contains the path to a default "scratch" folder for our lab. You can see the content of this variable with
 ```
-echo $SCRATCH
+echo $PI_SCRATCH
 ```
 
 Make a new folder for your team, and move to that folder. For example for team CKO
 ```
-mkdir teamCKO
+mkdir -p teamCKO
 cd teamCKO
 ```
 
-This folder is currently empty. You can list the content of the folder with 
+The `-p` flag is usefull in case the folder aready exists.
+
+This folder is currently empty. You can list the content of the current folder `.` with 
 ```
-ls -lah teamCKO
+ls .
 ```
 
-## Downloading a sequencing dataset
-Now we're going to download some sequencing data from the Gene Expression Omnibus https://www.ncbi.nlm.nih.gov/geo/, which is a public genomics data repository . For the purpose of familiarizing ourself with some simple long read sequencing data and metagenomics analysis, we will use some of the dataset reported in the Sevin et al. paper (Shotgun metagenome data of a defined mock community using Oxford Nanopore, PacBio and Illumina technologies). They did MinIon sequencing of synthetic microbial community `BMock12` consisting of 12 known 12 bacterial strains. Our goal is going to be to recover the identity of these strains starting from the (almost) raw data. The dataset accession number for the ONT reads without size selection is SRX5161985 (https://www.ncbi.nlm.nih.gov/sra/SRX5161985) 
-
+You can always see your current location in the filesystem with 
 ```
-mkdir -p external/woyke_mockcommunity/raw
-fasterq-dump SRR8351023 --progress --threads 6 --temp ./tmp/ --outdir ./external/woyke_mockcommunity/raw
+pwd
 ```
 
-Let's do some quick inspection of the data we downloaded.
-```
-cd /external/woyke_mockcommunity/raw
-ls -lah
-```
-We can see the previous command just downloaded a file called SRR8351023.fastq wich is ~ Gb in size.
-
-This is a fastq formatted file, which is the standard format for sequencing data. We can figure out how the file is organized by looking at the first 10 lines.
-
-```
-head SRR8351023.fastq
-```
-
-This is of the form 
+Now le'ts create a few subfolders to organize our work. We want our project directory (the team directory in that case) to look like this
 ```text
-<@READID (first read) and some other read info>
-<DNA sequence>
-<+repeat of the READID line>
-<Base call quality>
-<@READID (next read) and some other read info>
-etc..
-```
-So each read takes up 4 lines, with the sequence for read 1 at line2, sequence for read2 at line 4+2=6, etc... 
-
-## Basic qc
-### The quick manual way
-A lot of basic analysis of sequencing data can be done without relying on external sofware. If is extremely useful to know a few linux built-in commands that will come in handy in many context and especially for parsing raw sequencing data. Arguably the top 4 for a bioinformatician are `wc`, `sort`, `awk`, `uniq` (if you want to learn commands more you should also look at `cut`, `join` and `paste`). Let's show and example of real world application for these commands by doing the following qc analysis:
-- how many reads are present in our dataset
-- what is the read length distribution
-
-
-We can see how many reads are in this file by counting the number of lines and dividing by 4
-
-```
-wc -l SRR8351023.fastq
-# 579904 SRR8351023.fastq
-# 579904/4 = 144,976 reads
+teamCKO
+├── data
+│   └── woyke_mockcommunity
+└── notebooks
 ```
 
-What is the length of each read? We need to count the number of character for each sequence line. First let's  extract the sequences from the file. `awk` is a great unix program to manipulate text files line by line. Here we just filter lines whit a number modulo 4 = 2. Let's extract the first 3 sequences. The pipe operator allows us to chain commands. The parenthesis in awk serves as an if statement. $0 is a variable containing the whole line.
+The data folder will contain analysis for specific datasets, arranged into subfolders. The first dataset we will look at is a mock bacterial community from Woyke et al. so we'll already prepare a folder for it.
 
+Make these directories with 
+```bash
+mkdir -p data/woyke_mockcommunity notebooks
 ```
-head -n12 SRR8351023.fastq | awk '(NR%4==2){print $0}'
-```
-
-Now to get the length of these first three sequences, we just print the lengh of the line instead of the line itself
-
-```
-head -n12 SRR8351023.fastq | awk '(NR%4==2){print length($0)}'
-```
-
-Finally, we want to but a histogram of the how many times each read length is represented. For that, we need two useful commands: sort and uniq. Sort will just sort the lines, and uniq (wich requires sorted input), will count how many times each unique line occurs. We're ready to that for the whole file rather than the first three sequences so let's replace `head` with `cat`, which just reads through the whole file
-
-```
-cat SRR8351023.fastq | awk '(NR%4==2){print length($0)} | sort | uniq -c 
+Verify the tree scructure with 
+```bash
+tree .
 ```
 
-We can redirect the output to a file with the > operator. Let's put call this file `readlength.hist.txt` and put it in a dedicated `qc` folder One last command we may want to chain in an other sort command so that the histogram is sorted so that the mode of the distribution comes first (the length that shows up the most often). This is achieved with 
+## Running persistent / recoverable sessions with Gnu Screen
 
-```
-cd /scratch/groups/astraigh/bootcamp2020/teamCKO/external_data/woyke_mockcommunity
+What happens if I am in the middle of some task on Sherlock and I loose internet connection or close my computer? To avoid having to back to square one, we need to set up a persistent bash session. The standard way to do this is using a window manager such as GNU Screen.
 
-mkdir -p qc
-
-cat raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)} | sort | uniq -c | sort -k1,1nr > qc/readlength.hist.txt
+```bash
+screen -S bootcamp
 ```
 
-We can look at this file in a scrollable way with `less`.
-``` 
-less readlength.hist.txt
+This creates a new session called bootcamp. Let's demomstrate what it does by putting a mark in our terminal, leaving and coming back
+
+```bash
+# leave a mark
+echo "I am here"
+# keep track of the node number in the prompt (for example sh01-ln03)
+
+# close your terminal, then relogin into sherlock
+ssh sunetid@login.sherlock.stanford.edu
+
+# if you're not being assigned the same login node as before, connect to it. If it's the same skip this step
+ssh sh01-ln03
+
+# get back to you persistent session
+screen -r
 ```
 
-### QC with a dedicated tool fastqc and downloading data back
-The `fastqc` tool (preinstalled on the lab partition) can be used to get some other qc metrics, in particular about sequencing quality and overrepresentated sequences.
+## Getting computational resources on Sherlock
 
+When we ssh into sherlock, we automatically obtain a shell on a "login node". So far, we've ran all of our commands on a login node. You can see that from the look of the prompt `[bootcamper@sh01-ln03 login ~]` Login nodes are not meant to do any heavy computations. You can think of them as entry points into Sherlock, and places to do very simple operations, like parsing/creating directories, viewing files, etc...  
+
+For anything more computationally heavy than that, you need to request dedicated resources (in fact, if you run a command on a login node that takes too long to complete or requests too much memory, it will automatically get aborted). The way to ask for resources on Sherlock is through the resource manager and job scheduler Slurm (https://slurm.schedmd.com/documentation.html). There are several way to ask for resources with Slurm depending on whether you want to run an interactive job (where you keep entering commands), or want to submit a job that will run without your input when resources become available. This is explained in details here () ``
+
+For this bootcamp, we are going to request 2 cpus each for 3h. 
+`srun -p astraigh --time=03:00:00 --cpus-per-task=2 --pty bash`
+
+The last part of this command is to create an interactive job, more specically we are requesting a bash shell.
+
+You should quickly a prompt that looks like that `[bootcamper@sh02-09n13]` 
+This shell is running on a dedicated computational node (here sh02-09n13). Within this shell, you'll have access to 2 CPUS and 32gB of RAM.
+
+This computational node is part of the parition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, see ().
+
+## Loading packages for our subsequent analysis
+
+We preinistalled some bioinformatics tools we're going to use during this bootcamp inside an anaconda environment. Load this environment with
 ```
-fastqc raw/SRR8351023.fastq -o qc/ -t 2 
+source activate bootcamp
 ```
 
-This produced an html file, which we need to download to our computer to look at. File transfer operations to and from Sherlock are best done using `rsync`
 
-Open a new terminal tab in your computer, and then run 
-```
-rsync -avh --progress dtn.sherlock.stanford.edu:/scratch/groups/astraigh/bootcamp2020/teamCKO/external_data/woyke_mockcommunity/qc/*.html ~/Downloads
+## Additional resources
 
-```
-The command has the form `rsync <option flags> [source path] [destination path]`.  The optionnal flags -vh and --progress are just to tune the behavior of rsync and tell it to display progress in a nice way (-vh --prgress) and -a is to preserve timestamps on files. 
+- Running jobs on Sherlock : https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/
+- advanced connection options : https://www.sherlock.stanford.edu/docs/advanced-topics/connection/
+- GNU screen : https://www.howtoforge.com/linux_screen
 
-The source in on sherlock, and more specifically for file transfer we want to use a dedicated file transfer node on sherlock `dtn`. The targt path is just your local Download directory.
-
-Now let's take a look. On you local terminal, run
-```
-open ~/Dowloads/SRR8351023_fastqc.html
-```
 
 
 
