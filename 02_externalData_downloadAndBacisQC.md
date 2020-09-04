@@ -131,3 +131,5 @@ Questions:
 - What is the N50 for this dataset?
 - What is the median Q score
 - what is the mean error rate?
+
+Kelsey adds stuff
