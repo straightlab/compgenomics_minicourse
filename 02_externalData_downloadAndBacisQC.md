@@ -64,7 +64,7 @@ wc -l raw/SRR8351023.fastq
 # 579904/4 = 144,976 reads
 ```
 
-What is the length of each read? We need to count the number of character for each sequence line. First let's  extract the sequences from the file. `awk` is a great unix program to manipulate text files line by line. Here we just filter lines whit a number modulo 4 = 2. Let's extract the first 3 sequences. The pipe operator `|` allows us to chain commands. The parenthesis in awk serves as an if statement. $0 is a variable containing the whole line.
+What is the length of each read? We need to count the number of character for each sequence line. First let's  extract the sequences from the file. `awk` is a great unix program to manipulate text files line by line. Here we just filter lines with a number modulo 4 = 2. Let's extract the first 3 sequences. The pipe operator `|` allows us to chain commands. The parenthesis in awk serves as an if statement. $0 is a variable containing the whole line.
 
 ```
 head -n12 raw/SRR8351023.fastq | awk '(NR%4==2){print $0}'
@@ -76,7 +76,7 @@ Now to get the length of these first three sequences, we just print the lengh of
 head -n12 raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)}'
 ```
 
-Finally, we want to but a histogram of the how many times each read length is represented. For that, we need two useful commands: sort and uniq. Sort will just sort the lines, and uniq (wich requires sorted input), will count how many times each unique line occurs. We're ready to that for the whole file rather than the first three sequences so let's replace `head` with `cat`, which just reads through the whole file
+Finally, we want to but a histogram of the how many times each read length is represented. For that, we need two useful commands: sort and uniq. Sort will just sort the lines, and uniq (which requires sorted input), will count (-c) how many times each unique line occurs. We're ready to do that for the whole file rather than the first three sequences so let's replace `head` with `cat`, which just reads through the whole file
 
 ```
 cat raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)} | sort | uniq -c 
