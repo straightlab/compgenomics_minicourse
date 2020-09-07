@@ -73,7 +73,7 @@ head -n12 raw/SRR8351023.fastq | awk '(NR%4==2){print $0}'
 Now to get the length of these first three sequences, we just print the lengh of the line instead of the line itself
 
 ```
-head -n12 SRR8351023.fastq | awk '(NR%4==2){print length($0)}'
+head -n12 raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)}'
 ```
 
 Finally, we want to but a histogram of the how many times each read length is represented. For that, we need two useful commands: sort and uniq. Sort will just sort the lines, and uniq (wich requires sorted input), will count how many times each unique line occurs. We're ready to that for the whole file rather than the first three sequences so let's replace `head` with `cat`, which just reads through the whole file
