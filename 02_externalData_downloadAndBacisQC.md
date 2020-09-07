@@ -108,7 +108,7 @@ This produced an html file, which we need to download to our computer to look at
 
 Open a new terminal tab in your computer, and then run 
 ```
-rsync -avh --progress <username>@login.sherlock.stanford.edu:/scratch/groups/astraigh/bootcamp2020/teamCKO/external_data/woyke_mockcommunity/qc/*.html ~/Downloads
+rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/bootcamp2020/teamCKO/external_data/woyke_mockcommunity/qc/*.html ~/Downloads
 
 ```
 The command has the form `rsync <option flags> [source path] [destination path]`.  The optional flags -vh and --progress are just to tune the behavior of rsync and tell it to display progress in a nice way (-vh --prgress) and -a is to preserve timestamps on files. 
