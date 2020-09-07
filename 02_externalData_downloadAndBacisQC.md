@@ -79,7 +79,7 @@ head -n12 raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)}'
 Finally, we want to but a histogram of the how many times each read length is represented. For that, we need two useful commands: sort and uniq. Sort will just sort the lines, and uniq (which requires sorted input), will count (-c) how many times each unique line occurs. We're ready to do that for the whole file rather than the first three sequences so let's replace `head` with `cat`, which just reads through the whole file
 
 ```
-cat raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)} | sort | uniq -c 
+cat raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c 
 ```
 
 We can redirect the output to a file with the > operator. Let's put call this file `readlength.hist.txt` and put it in a dedicated `qc` folder One last command we may want to chain in an other sort command so that the histogram is sorted so that the mode of the distribution comes first (the length that shows up the most often). This is achieved with 
@@ -108,7 +108,7 @@ This produced an html file, which we need to download to our computer to look at
 
 Open a new terminal tab in your computer, and then run 
 ```
-rsync -avh --progress dtn.sherlock.stanford.edu:/scratch/groups/astraigh/bootcamp2020/teamCKO/external_data/woyke_mockcommunity/qc/*.html ~/Downloads
+rsync -avh --progress <username>@login.sherlock.stanford.edu:/scratch/groups/astraigh/bootcamp2020/teamCKO/external_data/woyke_mockcommunity/qc/*.html ~/Downloads
 
 ```
 The command has the form `rsync <option flags> [source path] [destination path]`.  The optional flags -vh and --progress are just to tune the behavior of rsync and tell it to display progress in a nice way (-vh --prgress) and -a is to preserve timestamps on files. 
