@@ -89,7 +89,7 @@ We can redirect the output to a file with the > operator. Let's put call this fi
 mkdir -p qc
 
 #create histogram and save it into a file
-cat raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)} | sort | uniq -c | sort -k1,1nr > qc/readlength.hist.txt
+cat raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c | sort -k1,1nr > qc/readlength.hist.txt
 ```
 
 We can look at this file in a scrollable way with `less`.
