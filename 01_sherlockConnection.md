@@ -35,8 +35,8 @@ echo $PI_SCRATCH
 
 Make a new folder for yourself, and move to that folder. For example for team CKO
 ```
-mkdir -p Charles
-cd Charles
+mkdir -p teamCKO
+cd teamCKO
 ```
 
 The `-p` flag is usefull in case the folder aready exists.
@@ -53,7 +53,7 @@ pwd
 
 Now let's create a few subfolders to organize our work. We want our project directory (the team directory in that case) to look like this
 ```text
-Charles
+teamCKO
 ├── data
 │   └── woyke_mockcommunity
 └── notebooks
@@ -75,10 +75,10 @@ tree .
 What happens if I am in the middle of some task on Sherlock and I loose internet connection or close my computer? To avoid having to back to square one, we need to set up a persistent bash session. The standard way to do this is using a window manager such as GNU Screen.
 
 ```bash
-screen -S bootcamp
+screen -S genomics
 ```
 
-This creates a new session called bootcamp. Let's demomstrate what it does by putting a mark in our terminal, leaving and coming back
+This creates a new session called genomics. Let's demomstrate what it does by putting a mark in our terminal, leaving and coming back
 
 ```bash
 # leave a mark
@@ -115,7 +115,15 @@ This computational node is part of the parition `astraigh` (specificed by the `-
 
 ## Loading packages for our subsequent analysis
 
-We preinistalled some bioinformatics tools we're going to use during this bootcamp inside an anaconda environment. Load this environment with
+We preinistalled some bioinformatics tools we're going to use during this bootcamp inside an anaconda environment. 
+
+First add the anaconda path to your bash profile
+
+```
+echo -e "PATH=/share/PI/astraigh/miniconda3/bin:$PATH" >>~/.bash_profile
+```
+
+Load this environment with
 ```
 source activate bootcamp
 ```
