@@ -24,19 +24,19 @@ ssh <username>@login.sherlock.stanford.edu
 
 
 ## Setting up our workspace for the project.
-Go to the bootcamp directory
+Go to the group minicourse directory
 ```
-cd $PI_SCRATCH/bootcamp2020
+cd $PI_SCRATCH/genomics_minicourse
 ```
 Note that `$PI_SCRATCH` is a bash variable, which contains the path to a default "scratch" folder for our lab. You can see the content of this variable with
 ```
 echo $PI_SCRATCH
 ```
 
-Make a new folder for your team, and move to that folder. For example for team CKO
+Make a new folder for yourself, and move to that folder. For example for team CKO
 ```
-mkdir -p teamCKO
-cd teamCKO
+mkdir -p Charles
+cd Charles
 ```
 
 The `-p` flag is usefull in case the folder aready exists.
@@ -51,15 +51,15 @@ You can always see your current location in the filesystem with
 pwd
 ```
 
-Now le'ts create a few subfolders to organize our work. We want our project directory (the team directory in that case) to look like this
+Now let's create a few subfolders to organize our work. We want our project directory (the team directory in that case) to look like this
 ```text
-teamCKO
+Charles
 ├── data
 │   └── woyke_mockcommunity
 └── notebooks
 ```
 
-The data folder will contain analysis for specific datasets, arranged into subfolders. The first dataset we will look at is a mock bacterial community from Woyke et al. so we'll already prepare a folder for it.
+The data folder will contain analysis for specific datasets, arranged into subfolders. The first dataset we will look at is a mock bacterial community from Woyke et al. so we'll prepare a folder for it.
 
 Make these directories with 
 ```bash
@@ -84,11 +84,12 @@ This creates a new session called bootcamp. Let's demomstrate what it does by pu
 # leave a mark
 echo "I am here"
 # keep track of the node number in the prompt (for example sh01-ln03)
+#the screen session will only be accessible from this login node
 
 # close your terminal, then relogin into sherlock
 ssh sunetid@login.sherlock.stanford.edu
 
-# if you're not being assigned the same login node as before, connect to it. If it's the same skip this step
+# if you're not assigned the same login node as before, connect to the original one. If it's the same skip this step
 ssh sh01-ln03
 
 # get back to you persistent session
@@ -97,16 +98,17 @@ screen -r
 
 ## Getting computational resources on Sherlock
 
-When we ssh into sherlock, we automatically obtain a shell on a "login node". So far, we've ran all of our commands on a login node. You can see that from the look of the prompt `[bootcamper@sh01-ln03 login ~]` Login nodes are not meant to do any heavy computations. You can think of them as entry points into Sherlock, and places to do very simple operations, like parsing/creating directories, viewing files, etc...  
+When we ssh into sherlock, we automatically obtain a shell on a "login node". So far, we've ran all of our commands on a login node. You can see that from the look of the prompt `[username@sh01-ln03 login ~]` Login nodes are not meant to do any heavy computations. You can think of them as entry points into Sherlock, and places to do very simple operations, like parsing/creating directories, viewing files, etc...  
 
 For anything more computationally heavy than that, you need to request dedicated resources (in fact, if you run a command on a login node that takes too long to complete or requests too much memory, it will automatically get aborted). The way to ask for resources on Sherlock is through the resource manager and job scheduler Slurm (https://slurm.schedmd.com/documentation.html). There are several way to ask for resources with Slurm depending on whether you want to run an interactive job (where you keep entering commands), or want to submit a job that will run without your input when resources become available. This is explained in details here () ``
 
 For this bootcamp, we are going to request 2 cpus each for 3h. 
 `srun -p astraigh --time=03:00:00 --cpus-per-task=2 --pty bash`
 
-The last part of this command is to create an interactive job, more specically we are requesting a bash shell.
+The last part of this command (--pty bash) is to create an interactive job, more specically we are requesting a bash shell.
 
-You should quickly a prompt that looks like that `[bootcamper@sh02-09n13]` 
+You should quickly a prompt that looks like that `srun: job <ID> queued and waiting for resources` 
+Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/genomics_minicourse/username_dir]$
 This shell is running on a dedicated computational node (here sh02-09n13). Within this shell, you'll have access to 2 CPUS and 32gB of RAM.
 
 This computational node is part of the parition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, see ().
