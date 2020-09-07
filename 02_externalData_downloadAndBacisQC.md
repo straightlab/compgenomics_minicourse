@@ -31,7 +31,7 @@ Let's do some quick inspection of the data we downloaded.
 ```
 ls -lh raw
 ```
-We can see the previous command just downloaded a file called SRR8351023.fastq wich is ~ Gb in size.
+We can see the previous command just downloaded a file called SRR8351023.fastq wich is 1.8Gb in size.
 
 This is a fastq formatted file, which is the standard format for sequencing data. We can figure out how the file is organized by looking at the first 10 lines.
 
@@ -132,4 +132,3 @@ Questions:
 - What is the median Q score
 - what is the mean error rate?
 
-Kelsey adds stuff
