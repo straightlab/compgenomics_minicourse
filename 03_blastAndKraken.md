@@ -58,7 +58,7 @@ blastn -query <(head -n 20 raw/SRR8351023.fasta) -db /scratch/groups/astraigh/kr
 As you can see, blast takes a very long time to run, and there is an additionnal complexity which is that it returns more than one hit per read.
 
 ## Running Kraken
-Rather than running blasts, taxonomic classification can be done using dedicated tools. Kraken2 (https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown) is a commonly used taxonomic sequence classifier, which examines the k-mers within a query sequence and compare these k-mers with those present in a taxonomic database. 
+Rather than running blasts, taxonomic classification can be done using dedicated tools. Kraken2 (https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown) is a commonly used taxonomic sequence classifier, which examines the k-mers within a query sequence and compare these k-mers with those present in a taxonomic database [[1,2]]. 
 
 We have prebuild a taxonomic kmer database for kranken2 on Sherlock. This database contains RefSeq complete genomes for all archea, bacteria, virus, and the human genome. 
 
@@ -88,4 +88,13 @@ cat kraken/standard.kreport | sed 's/ \+ /\t/g' | sed 's/ *$//' | tr -s "\t" | c
 
 Now we have some data ready to load in R for plotting. Follow the instructions in notebook 04 to open a remote R session. We will do some analysis within the R notebook.
 
+## References
+
+<a id="1">[1]</a> 
+Wood, D.E., Salzberg, S.L. Kraken: ultrafast metagenomic sequence classification using exact alignments. 
+Genome Biol 15, R46 (2014). https://doi.org/10.1186/gb-2014-15-3-r46
+
+<a id="1">[2]</a> 
+Wood, D.E., Lu, J. & Langmead, B. Improved metagenomic analysis with Kraken 2.
+Genome Biol 20, 257 (2019). https://doi.org/10.1186/s13059-019-1891-0
 
