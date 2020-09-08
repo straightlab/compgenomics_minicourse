@@ -14,7 +14,7 @@ Covered tools and concepts in this notebook:
 
 ## GEO data download 
 Data stored on GEO can be downloaded using `fasterq-dump` tool.
-We'll download the raw data within the subfolder `raw` within the folder `data/woyke_mockcommunity` we've created earlier. Always keep things organized to avoid headaches down the road!
+We'll download the raw data within the subfolder `raw` within the folder `data/mock12` we've created earlier. Always keep things organized to avoid headaches down the road!
 
 ```bash
 #recall your folder name
