@@ -56,14 +56,17 @@ Now let's create a few subfolders to organize our work. We want our project dire
 teamCKO
 ├── data
 │   └── woyke_mockcommunity
-└── notebooks
+├──notebooks
+└──tmp
 ```
 
-The data folder will contain analysis for specific datasets, arranged into subfolders. The first dataset we will look at is a mock bacterial community from Woyke et al. so we'll prepare a folder for it.
+- The `notebook` folder will contain our R notebooks or any notes related to the analysis.
+- The `tmp` folder is a scratch folder which we will use to put temporary files (some programs create temporary files and require a dedicated folder for these files).
+- The `data` folder will contain analysis for specific datasets, arranged into subfolders. The first dataset we will look at is a mock community of 12 bacterial strains so we'll prepare a folder for it.
 
 Make these directories with 
 ```bash
-mkdir -p data/woyke_mockcommunity notebooks
+mkdir -p data/mock12 notebooks tmp
 ```
 Verify the tree scructure with 
 ```bash
@@ -147,7 +150,3 @@ where the JOBID is obtained from `squeue`
 - Running jobs on Sherlock : https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/
 - advanced connection options : https://www.sherlock.stanford.edu/docs/advanced-topics/connection/
 - GNU screen : https://www.howtoforge.com/linux_screen
-
-
-
-
