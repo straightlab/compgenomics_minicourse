@@ -37,7 +37,7 @@ mkdir -p blast
 export BLASTDB=/scratch/groups/astraigh/kraken
 
 #run blast
-blastn -query raw/SRR8351023.head.fasta -db /scratch/groups/astraigh/kraken/ref_prok_rep_genomes/blast/ref_prok_rep_genomes >blast/rawoutput.first10.txt
+blastn -query raw/SRR8351023.head.fasta -db /scratch/groups/astraigh/kraken/ref_prok_rep_genomes/blast/ref_prok_rep_genomes -num_threads 4 >blast/rawoutput.first10.txt
 ```
 
 
@@ -55,12 +55,12 @@ We can instead ask blast to produce a tabulated output, which is more computatio
 blastn -query <(head -n 20 raw/SRR8351023.fasta) -db /scratch/groups/astraigh/kraken/ref_prok_rep_genomes/blast/ref_prok_rep_genomes -num_threads 4 -subject_besthit -outfmt "6 qseqid sseqid pident length mismatches gapopen evalue bitscore ssciname staxid sskingdom" > blast/tabulated.output.first10.txt
 ```
 
-As you can see, blast takes a very long time to run, and there is an additionnal complexity which is that it returns more than one hit per read.
+As you can see, blast takes a long time to run, and there is an additionnal complexity which is that it returns more than one hit per read.
 
 ## Running Kraken
 Rather than running blasts, taxonomic classification can be done using dedicated tools. Kraken2 (https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown) is a commonly used taxonomic sequence classifier, which examines the k-mers within a query sequence and compare these k-mers with those present in a taxonomic database [[1,2]]. 
 
-We have prebuild a taxonomic kmer database for kranken2 on Sherlock. This database contains RefSeq complete genomes for all archea, bacteria, virus, and the human genome. 
+We have prebuild a taxonomic kmer database for kranken2 on Sherlock. This database contains RefSeq complete genomes for all archea, bacteria, virus, and the human genome. This is a huge database with >70 000 genomes. The bacterial subdatabase itself is ~86 billion nucleotides.  
 
 
 ```bash
@@ -68,7 +68,7 @@ We have prebuild a taxonomic kmer database for kranken2 on Sherlock. This databa
 mkdir kraken
 
 #run kraken
-kraken2 -db /scratch/groups/astraigh/kraken/standard --threads 2 --report kraken/standard.kreport --use-names --output kraken/standard.out.txt raw/SRR8351023.fastq
+kraken2 -db /scratch/groups/astraigh/kraken/standard --threads 4 --report kraken/standard.kreport --use-names --output kraken/standard.out.txt raw/SRR8351023.fastq
 ```
 
 Take a look at the kraken report
