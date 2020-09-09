@@ -44,7 +44,7 @@ blastn -query raw/SRR8351023.head.fasta -db /scratch/groups/astraigh/kraken/ref_
 Note we can use "process substitution" with `<()` to get the first 10 reads on the fly without having to create an intermediate file
 
 ```
-blastn -query <(head -n 20 raw/SRR8351023.fasta) -db /scratch/groups/astraigh/kraken/ref_prok_rep_genomes/blast/ref_prok_rep_genomes >blast/raw.output.first10.txt
+blastn -query <(head -n 20 raw/SRR8351023.fasta) -db /scratch/groups/astraigh/kraken/ref_prok_rep_genomes/blast/ref_prok_rep_genomes -num_threads 4 >blast/raw.output.first10.txt
 ```
 
 Taking a look at this file with `less` shows that this command returns the blast hits in a format similar to the format we obtain when running blast online. 
@@ -52,7 +52,7 @@ Taking a look at this file with `less` shows that this command returns the blast
 We can instead ask blast to produce a tabulated output, which is more computationally friendy, using the `--outfmt 6` flag.
 
 ```
-blastn -query <(head -n 20 raw/SRR8351023.fasta) -db /scratch/groups/astraigh/kraken/ref_prok_rep_genomes/blast/ref_prok_rep_genomes -outfmt "6 qseqid sseqid pident length mismatches gapopen evalue bitscore ssciname" > blast/tabulated.output.first10.txt
+blastn -query <(head -n 20 raw/SRR8351023.fasta) -db /scratch/groups/astraigh/kraken/ref_prok_rep_genomes/blast/ref_prok_rep_genomes -num_threads 4 -subject_besthit -outfmt "6 qseqid sseqid pident length mismatches gapopen evalue bitscore ssciname staxid sskingdom" > blast/tabulated.output.first10.txt
 ```
 
 As you can see, blast takes a very long time to run, and there is an additionnal complexity which is that it returns more than one hit per read.
