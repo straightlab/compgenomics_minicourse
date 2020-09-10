@@ -1,0 +1,229 @@
+---
+title: "Metagenomics analysis"
+author: "Charles"
+output:
+  html_document:
+    toc: true 
+    toc_depth: 3  
+    number_sections: true 
+    theme: united 
+    highlight: tango
+    df_print: paged
+---
+
+
+# Load libraries
+
+```{r, include=FALSE, cache=FALSE}
+#.libPaths("/home/groups/astraigh/R_packages_3.6")
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+```
+
+
+# Abundance analysis
+
+## Raw abundance 
+
+First let's load the kraken report file
+
+```{r}
+species_counts <- read.table('/scratch/groups/astraigh/genomics_minicourse/shared/data/mock12/kraken/standard.species.txt',sep='\t', col.names=c("fraction","Nclade","Ntaxon","type","taxid","name"))
+species_counts <-as_tibble(species_counts) %>%
+  mutate(name=as.character(name))
+```
+
+
+We can take a look at it
+```{r}
+species_counts
+```
+
+
+Plot the raw number of reads assigned to these top 20 species
+```{r}
+ species_counts %>%
+  head(n=20) %>%
+  mutate(name=factor(name, levels=rev(name))) %>%
+  ggplot(aes(x=name, y=Nclade)) +
+  geom_bar(stat='identity')+
+  theme_minimal()+
+  labs(x='Species', y='N reads')+
+  coord_flip()
+
+```
+
+
+Plot the percentage of reads assigned to these top 20 species
+```{r}
+ species_counts %>%
+  head(n=20) %>%
+  mutate(name=factor(name, levels=rev(name))) %>%
+  ggplot(aes(x=name, y=fraction)) +
+  geom_bar(stat='identity')+
+  theme_minimal()+
+  labs(x='Species', y='Reads fraction (%)')+
+  coord_flip()
+
+```
+
+
+## Length normalized abundance
+
+The percentages returned by kraken at the species level are those of the number of reads that are assigned to each species. These are not necessarily equal to the relative abundance of each species because :
+
+- species with longer genomes will give rise to more reads than species with shorter genomes
+- some reads may not be assigned at the species level but at higher level of the taxonomy tree. This occurs when there are ties in the assignment due to low sequence diversity within a subtree of the taxonomy tree.
+- some species might have a higher probability of being assigned because they contain more k-mers unique to that species or only present in a few species (as opposed to k-mers that are generic and present in many species). The presence of such k-mers in a genome really helps the indetification process as they can disambiguate a species from its genetic neighbors. We will discuss this idea in the bonus section.
+
+To obtain better estimate of species abundance, one need to correct for these effects. Here, we will only worry about the length normalization and ignore the other effects.
+
+
+### Obtain genome length
+We created a file with the length of each sequence in our fasta containing all the bacterial genomes (using awk). Here we just read that file in a tibble.
+
+```{r}
+scaffold_length <- as_tibble(read.table('/scratch/groups/astraigh/kraken/standard/library/bacteria/library.length.txt',sep='\t', col.names=c("taxid","scaffold","L")))
+scaffold_length
+```
+
+Some genomes have multiple scaffolds so we need to sum that up.
+```{r}
+genome_length <- scaffold_length %>%
+  group_by(taxid) %>%
+  summarize(L=sum(L))
+
+genome_length
+```
+
+By the way, let's look at the total sequence length in our database.
+```{r}
+total_length <- scaffold_length %>%
+  summarize(L=sum(L/1000000))
+
+total_length #in Mbp
+```
+
+Let us combine the genome length information and the kraken output in a single dataframe
+```{r}
+species_counts_withLength_top20 <- 
+  species_counts %>%
+  head(n=20) %>%
+  dplyr::filter(taxid!='9606') %>%
+  left_join(genome_length, by='taxid') %>%
+  mutate(name=factor(name, levels=rev(name)))
+
+species_counts_withLength_top20
+```
+
+Note that some species don't have a length. This is because the assignement is not at a leaf of the taxnomy tree. Indeed, in some cases, the assignment is at the sepcies level, but the sequences in the database are for specifc strains below the species level in the taxonomy tree. We need to get the sequence length at the strain level, and then match up the taxon id at the species level with the taxon id at the strain level. This piece of code does that
+
+```{r}
+# load the strain to species relationship
+strains <- as_tibble(read.table('/scratch/groups/astraigh/kraken/standard/taxonomy/strains.txt',sep='\t', col.names=c("taxid_strain","taxid")))
+
+# get the abundance for the top 20 species and remove homo sapiens (taxid 9606)
+species_counts_withLength_top20 <-
+  species_counts %>%
+  head(n=20) %>%
+  dplyr::filter(taxid!='9606') %>%
+  left_join(strains, by='taxid')
+
+# For species that have strain level information, change the taxid at the species level and replace it with the taxid at the strain level
+species_counts_withLength_top20[!is.na(species_counts_withLength_top20$taxid_strain), 'taxid']<-species_counts_withLength_top20[ !is.na(species_counts_withLength_top20$taxid_strain),'taxid_strain']
+
+# add on length from our genome length database
+species_counts_withLength_top20<-
+  species_counts_withLength_top20 %>%
+  dplyr::select(-taxid_strain) %>%
+ left_join(genome_length, by='taxid') %>%
+  mutate(name=factor(name, levels=rev(name)))
+  
+#take a look at the resulting tibble
+species_counts_withLength_top20
+
+```
+
+Let's plot the length of each of the top 20 genomes (we removed Homo Sapiens)
+```{r}
+ species_counts_withLength_top20 %>%
+  mutate(name=factor(name, levels=rev(name))) %>%
+  ggplot(aes(y=name, x=L)) +
+  geom_bar(stat="identity")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+### Estimate length normalized abundance
+
+We're finally ready to length normalize and plot the adjusted proportions
+```{r}
+species_counts_withLength_top20 %>%
+  mutate(N_norm=Nclade/L, fraction_norm=N_norm/sum(N_norm)*100) %>%
+  mutate(name=factor(name, levels=rev(name))) %>%
+ ggplot(aes(x=name, y=fraction_norm)) +
+  geom_bar(stat='identity')+
+  theme_minimal()+
+  labs(x='Species', y='Abundance estimate (%)')+
+  coord_flip()
+```
+
+## Bonus: does genome length really correlate with higher probability of assignment?
+
+We can look at the number of k-mers assigned to a given Least Common Ancester (LCA). This information is obtained by running the kraken-inspect command on the database. We can look at the LCA counts the same way we look at the species count. We only care about the LCA that are at the species level.
+
+```{r}
+LCA_counts <- read.table('/scratch/groups/astraigh/kraken/standard/report.species.txt',sep='\t', col.names=c("fraction","Nclade","Ntaxon","type","taxid","name"))
+LCA_counts <-as_tibble(LCA_counts) %>%
+  mutate(name=as.character(name))
+
+# get the abundance for the top 20 species and remove homo sapiens (taxid 9606)
+LCA_counts_withLength <-
+  LCA_counts %>%
+
+  left_join(strains, by='taxid')
+
+# reassign the taxid at the species level to that of the strain where necessary
+LCA_counts_withLength[!is.na(LCA_counts_withLength$taxid_strain), 'taxid']<-LCA_counts_withLength[ !is.na(LCA_counts_withLength$taxid_strain),'taxid_strain']
+
+
+# add on length
+LCA_counts_withLength<-
+  LCA_counts_withLength %>%
+  dplyr::select(-taxid_strain) %>%
+ inner_join(genome_length, by='taxid') 
+  
+LCA_counts_withLength
+
+```
+
+
+Does the genome length correlates with number of k-mer assigned to a given species?
+
+```{r}
+LCA_counts_withLength %>%
+  ggplot(aes(x=log(L), y=log(Nclade))) +
+  geom_point(alpha=0.1)+
+  theme_minimal()+
+  labs(x='log(Genome Length)', y='log(Number of LCA k-mers)')
+```
+
+The answer is mostly yes, but some genomes really deviate from it!!
+
+Let's look at that for the just the 20 species we are interested in
+
+```{r}
+LCA_counts_withLength %>%
+  dplyr::filter(taxid %in% (species_counts_withLength_top20%>%pull(taxid))) %>%
+  ggplot(aes(x=L, y=Nclade)) +
+  geom_point(alpha=1)+
+  theme_minimal()+
+  labs(x='Genome Length', y='Number of LCA k-mers')
+```
+
+So as you can see this effect is not trivial! To be done properly, the abundance estimation turns out to be a more complicated problem than it  appears at first. Some people have been thinking about this carefully and developped adequate statistical models to handle the issues discussed above [1]. 
+
+## References
+
+- [1] Lu J, Breitwieser FP, Thielen P, Salzberg SL. (2017) Bracken: estimating species abundance in metagenomics data. PeerJ Computer Science 3:e104, doi:10.7717/peerj-cs.104 (https://ccb.jhu.edu/software/bracken/)

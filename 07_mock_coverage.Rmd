@@ -1,0 +1,127 @@
+---
+title: "Coverage analysis of indentified species"
+author: "Charles"
+output:
+  html_document:
+    toc: true 
+    toc_depth: 3
+    number_sections: true  
+    theme: united 
+    highlight: tango
+    df_print: paged
+---
+
+In this notebook, we will produce genome coverage plots for the identified species
+
+# Load libraries
+```{r, include=FALSE, cache=FALSE}
+#.libPaths("/home/groups/astraigh/R_packages_3.6")
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+```
+
+
+# Covaerage analysis
+
+## Quick look
+Load the coverage report in a tibble
+```{r}
+bp_coverage <- read.table('/scratch/groups/astraigh/genomics_minicourse/shared/data/mock12/alignments/ont.coverage.txt',sep='\t', col.names=c("scaffold","coverage","N_bp","scaffold_size","percent_bp"))
+bp_coverage <-as_tibble(bp_coverage)
+```
+
+Take a look
+```{r}
+bp_coverage
+```
+
+Plot the coverage distribution (percent of basepairs as a function of the coverage depth)
+```{r}
+bp_coverage %>%
+  dplyr::filter(coverage>0) %>%
+  ggplot(aes(x=coverage, y=percent_bp, color=scaffold))+
+  geom_point(size=1)+
+  theme_minimal()+
+  scale_x_log10()+
+  scale_y_log10()+
+  annotation_logticks()
+```
+
+
+## Clean up
+Some species have multiple scaffolds. We need to group together scaffolds from the same species. 
+
+Firs, we load the scaffold to taxid map.
+```{r}
+scaf2taxid <- as_tibble(read.table('/scratch/groups/astraigh/kraken/standard/scaffold2taxid.map',sep=' ', col.names=c("scaffold","taxid")))
+head(scaf2taxid)
+```
+
+We add species info
+```{r}
+genomes_info <- as_tibble(read.table('/scratch/groups/astraigh/genomics_minicourse/shared/data/mock12/kraken/top19.genomes.txt',sep='\t', col.names=c("taxid","species_taxid","name","file","blank","species"))) %>%
+   dplyr::select(-file, -blank)
+
+scaffold_withInfo<- scaf2taxid %>%
+  inner_join(genomes_info, by='taxid')
+
+scaffold_withInfo
+```
+
+Now we can group together the coverage values by species
+```{r}
+bp_coverage_byspecies <-
+  bp_coverage %>% 
+  left_join(scaffold_withInfo %>% dplyr::select(scaffold, species)) %>%
+  group_by(species, coverage) %>%
+  summarise(N_bp=sum(N_bp), scaffold_size=sum(scaffold_size)) %>%
+  group_by(species) %>%
+  mutate(percent_bp=N_bp/scaffold_size) %>%
+    ungroup()
+```
+
+Take a look at the result
+```{r}
+bp_coverage_byspecies
+```
+
+
+### Coverage distribution by species
+
+```{r, fig.width=12, fig.height=4}
+bp_coverage_byspecies %>%
+  dplyr::filter(coverage>0) %>%
+  ggplot(aes(x=coverage, y=percent_bp, color=species))+
+  geom_point(size=1)+
+  theme_minimal()+
+  scale_x_log10()+
+  scale_y_log10()+
+  annotation_logticks()
+```
+
+
+### Mean coverage
+Get the mean coverage by species
+```{r}
+bp_coverage_byspecies_mean <-
+  bp_coverage_byspecies %>%
+  group_by(species) %>%
+  summarise(coverage_mean=sum(coverage*(N_bp/sum(N_bp)))) %>%
+  ungroup()
+
+bp_coverage_byspecies_mean
+```
+
+And lastly, plot.
+```{r}
+bp_coverage_byspecies_mean %>%
+  arrange(desc(coverage_mean)) %>%
+  mutate(species=as.character(species)) %>%
+  mutate(species=factor(species, levels=species)) %>%
+  ggplot(aes(x=species, y=coverage_mean)) +
+  geom_bar(stat="identity")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
