@@ -1,2 +1,2 @@
-# bootcamp
-Biochemistry Genomics Bootcamp
+# Computational genomics minicourse
+

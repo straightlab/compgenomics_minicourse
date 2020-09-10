@@ -24,16 +24,16 @@ ssh <username>@login.sherlock.stanford.edu
 
 
 ## Setting up our workspace for the project.
-Go to the bootcamp directory
+Go to the group minicourse directory
 ```
-cd $PI_SCRATCH/bootcamp2020
+cd $PI_SCRATCH/genomics_minicourse
 ```
 Note that `$PI_SCRATCH` is a bash variable, which contains the path to a default "scratch" folder for our lab. You can see the content of this variable with
 ```
 echo $PI_SCRATCH
 ```
 
-Make a new folder for your team, and move to that folder. For example for team CKO
+Make a new folder for yourself, and move to that folder. For example for team CKO
 ```
 mkdir -p teamCKO
 cd teamCKO
@@ -51,19 +51,22 @@ You can always see your current location in the filesystem with
 pwd
 ```
 
-Now le'ts create a few subfolders to organize our work. We want our project directory (the team directory in that case) to look like this
+Now let's create a few subfolders to organize our work. We want our project directory (the team directory in that case) to look like this
 ```text
 teamCKO
 ├── data
 │   └── woyke_mockcommunity
-└── notebooks
+├──notebooks
+└──tmp
 ```
 
-The data folder will contain analysis for specific datasets, arranged into subfolders. The first dataset we will look at is a mock bacterial community from Woyke et al. so we'll already prepare a folder for it.
+- The `notebook` folder will contain our R notebooks or any notes related to the analysis.
+- The `tmp` folder is a scratch folder which we will use to put temporary files (some programs create temporary files and require a dedicated folder for these files).
+- The `data` folder will contain analysis for specific datasets, arranged into subfolders. The first dataset we will look at is a mock community of 12 bacterial strains so we'll prepare a folder for it.
 
 Make these directories with 
 ```bash
-mkdir -p data/woyke_mockcommunity notebooks
+mkdir -p data/mock12 notebooks tmp
 ```
 Verify the tree scructure with 
 ```bash
@@ -75,20 +78,21 @@ tree .
 What happens if I am in the middle of some task on Sherlock and I loose internet connection or close my computer? To avoid having to back to square one, we need to set up a persistent bash session. The standard way to do this is using a window manager such as GNU Screen.
 
 ```bash
-screen -S bootcamp
+screen -S genomics
 ```
 
-This creates a new session called bootcamp. Let's demomstrate what it does by putting a mark in our terminal, leaving and coming back
+This creates a new session called genomics. Let's demomstrate what it does by putting a mark in our terminal, leaving and coming back
 
 ```bash
 # leave a mark
 echo "I am here"
 # keep track of the node number in the prompt (for example sh01-ln03)
+#the screen session will only be accessible from this login node
 
 # close your terminal, then relogin into sherlock
 ssh sunetid@login.sherlock.stanford.edu
 
-# if you're not being assigned the same login node as before, connect to it. If it's the same skip this step
+# if you're not assigned the same login node as before, connect to the original one. If it's the same skip this step
 ssh sh01-ln03
 
 # get back to you persistent session
@@ -97,34 +101,52 @@ screen -r
 
 ## Getting computational resources on Sherlock
 
-When we ssh into sherlock, we automatically obtain a shell on a "login node". So far, we've ran all of our commands on a login node. You can see that from the look of the prompt `[bootcamper@sh01-ln03 login ~]` Login nodes are not meant to do any heavy computations. You can think of them as entry points into Sherlock, and places to do very simple operations, like parsing/creating directories, viewing files, etc...  
+When we ssh into sherlock, we automatically obtain a shell on a "login node". So far, we've ran all of our commands on a login node. You can see that from the look of the prompt `[username@sh01-ln03 login ~]` Login nodes are not meant to do any heavy computations. You can think of them as entry points into Sherlock, and places to do very simple operations, like parsing/creating directories, viewing files, etc...  
 
-For anything more computationally heavy than that, you need to request dedicated resources (in fact, if you run a command on a login node that takes too long to complete or requests too much memory, it will automatically get aborted). The way to ask for resources on Sherlock is through the resource manager and job scheduler Slurm (https://slurm.schedmd.com/documentation.html). There are several way to ask for resources with Slurm depending on whether you want to run an interactive job (where you keep entering commands), or want to submit a job that will run without your input when resources become available. This is explained in details here () ``
+For anything more computationally heavy than that, you need to request dedicated resources (in fact, if you run a command on a login node that takes too long to complete or requests too much memory, it will automatically get aborted). The way to ask for resources on Sherlock is through the resource manager and job scheduler Slurm (https://slurm.schedmd.com/documentation.html). There are several way to ask for resources with Slurm depending on whether you want to run an interactive job (where you keep entering commands), or want to submit a job that will run without your input when resources become available. This is explained in "Running jobs on Sherlock" <https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/>.
 
 For this bootcamp, we are going to request 2 cpus each for 3h. 
 `srun -p astraigh --time=03:00:00 --cpus-per-task=2 --pty bash`
 
-The last part of this command is to create an interactive job, more specically we are requesting a bash shell.
+The last part of this command (--pty bash) is to create an interactive job, more specically we are requesting a bash shell.
 
-You should quickly a prompt that looks like that `[bootcamper@sh02-09n13]` 
+You should quickly a prompt that looks like that `srun: job <ID> queued and waiting for resources` 
+Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/genomics_minicourse/teamCKO]$
 This shell is running on a dedicated computational node (here sh02-09n13). Within this shell, you'll have access to 2 CPUS and 32gB of RAM.
 
-This computational node is part of the parition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, see ().
+This computational node is part of the parition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, refer to the Sherlock documentation.
 
 ## Loading packages for our subsequent analysis
 
-We preinistalled some bioinformatics tools we're going to use during this bootcamp inside an anaconda environment. Load this environment with
+We preinistalled some bioinformatics tools we're going to use during this bootcamp inside an anaconda environment. 
+
+First add the anaconda path to your bash profile
+
+```
+echo -e "PATH=/share/PI/astraigh/miniconda3/bin:$PATH" >>~/.bashrc
+```
+
+Load this environment with
 ```
 source activate bootcamp
 ```
 
+
+## Managing your SLURM jobs
+
+You can see the jobs currently running on the cluster with 
+```
+squeue -u $USER
+```
+
+You can cancel a running job with 
+```
+scancel <JOBID>
+```
+where the JOBID is obtained from `squeue`
 
 ## Additional resources
 
 - Running jobs on Sherlock : https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/
 - advanced connection options : https://www.sherlock.stanford.edu/docs/advanced-topics/connection/
 - GNU screen : https://www.howtoforge.com/linux_screen
-
-
-
-
