@@ -40,4 +40,6 @@ cd /oak/stanford/groups/astraigh/T2T/PROseq
 
 /home/groups/astraigh/software/ncbi-blast-2.10.1+/bin/makeblastdb -in chm13.draft_v1.0.fasta -dbtype nucl -parse_seqids
 
+## Make bowtie2 db
+ml biology bowtie2
 bowtie2-build -f --threads 16 chm13.draft_v1.0.fasta chm13.draft_v1.0
