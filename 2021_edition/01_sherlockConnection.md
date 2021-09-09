@@ -26,17 +26,17 @@ ssh <username>@login.sherlock.stanford.edu
 ## Setting up our workspace for the project.
 Go to the group minicourse directory
 ```
-cd $PI_SCRATCH/genomics_minicourse
+cd $GROUP_SCRATCH/biochem_minicourse_2021
 ```
-Note that `$PI_SCRATCH` is a bash variable, which contains the path to a default "scratch" folder for our lab. You can see the content of this variable with
+Note that `$GROUP_SCRATCH` is a bash variable, which contains the path to a default "scratch" folder for our lab. You can see the content of this variable with
 ```
-echo $PI_SCRATCH
+echo $GROUP_SCRATCH
 ```
 
 Make a new folder for yourself, and move to that folder. For example for team CKO
 ```
-mkdir -p teamCKO
-cd teamCKO
+mkdir -p teamStraight
+cd teamStraight
 ```
 
 The `-p` flag is usefull in case the folder aready exists.
@@ -53,20 +53,20 @@ pwd
 
 Now let's create a few subfolders to organize our work. We want our project directory (the team directory in that case) to look like this
 ```text
-teamCKO
+teamStraight
 ├── data
-│   └── woyke_mockcommunity
-├──notebooks
+│   └── sample1
+|   └── sample2
+|   └── external_dat
 └──tmp
 ```
 
-- The `notebook` folder will contain our R notebooks or any notes related to the analysis.
 - The `tmp` folder is a scratch folder which we will use to put temporary files (some programs create temporary files and require a dedicated folder for these files).
-- The `data` folder will contain analysis for specific datasets, arranged into subfolders. The first dataset we will look at is a mock community of 12 bacterial strains so we'll prepare a folder for it.
+- The `data` folder will contain analysis for specific datasets, arranged into subfolders.
 
 Make these directories with 
 ```bash
-mkdir -p data/mock12 notebooks tmp
+mkdir -p data/sample1 sample2 external_dat
 ```
 Verify the tree scructure with 
 ```bash
@@ -111,7 +111,7 @@ For this bootcamp, we are going to request 2 cpus each for 3h.
 The last part of this command (--pty bash) is to create an interactive job, more specically we are requesting a bash shell.
 
 You should quickly a prompt that looks like that `srun: job <ID> queued and waiting for resources` 
-Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/genomics_minicourse/teamCKO]$
+Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/biochem_minicourse_2021/teamStraight]$
 This shell is running on a dedicated computational node (here sh02-09n13). Within this shell, you'll have access to 2 CPUS and 32gB of RAM.
 
 This computational node is part of the parition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, refer to the Sherlock documentation.
