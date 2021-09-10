@@ -67,20 +67,20 @@ Make these directories with
 ```bash
 mkdir -p data/samples external
 ```
-Verify the tree scructure with 
+Verify the tree structure with 
 ```bash
 tree .
 ```
 
 ## Running persistent / recoverable sessions with Gnu Screen
 
-What happens if I am in the middle of some task on Sherlock and I loose internet connection or close my computer? To avoid having to back to square one, we need to set up a persistent bash session. The standard way to do this is using a window manager such as GNU Screen.
+What happens if I am in the middle of some task on Sherlock and I lose internet connection or close my computer? To avoid having to go back to square one, we need to set up a persistent bash session. The standard way to do this is using a window manager such as GNU Screen.
 
 ```bash
 screen -S genomics
 ```
 
-This creates a new session called genomics. Let's demomstrate what it does by putting a mark in our terminal, leaving and coming back
+This creates a new session called genomics. Let's demonstrate what it does by putting a mark in our terminal, leaving and coming back
 
 ```bash
 # leave a mark
@@ -100,29 +100,30 @@ screen -r
 
 ## Getting computational resources on Sherlock
 
-When we ssh into sherlock, we automatically obtain a shell on a "login node". So far, we've ran all of our commands on a login node. You can see that from the look of the prompt `[username@sh01-ln03 login ~]` Login nodes are not meant to do any heavy computations. You can think of them as entry points into Sherlock, and places to do very simple operations, like parsing/creating directories, viewing files, etc...  
+When we ssh into sherlock, we automatically obtain a shell on a "login node". So far, we've ran all of our commands on a login node. You can see that from the look of the prompt `[username@sh01-ln03 login ~]`. Login nodes are not meant to do any heavy computations. You can think of them as entry points into Sherlock, and places to do very simple operations, like parsing/creating directories, viewing files, etc...  
 
-For anything more computationally heavy than that, you need to request dedicated resources (in fact, if you run a command on a login node that takes too long to complete or requests too much memory, it will automatically get aborted). The way to ask for resources on Sherlock is through the resource manager and job scheduler Slurm (https://slurm.schedmd.com/documentation.html). There are several way to ask for resources with Slurm depending on whether you want to run an interactive job (where you keep entering commands), or want to submit a job that will run without your input when resources become available. This is explained in "Running jobs on Sherlock" <https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/>.
+For anything more computationally heavy than that, you need to request dedicated resources (in fact, if you run a command on a login node that takes too long to complete or requests too much memory, it will automatically get aborted). The way to ask for resources on Sherlock is through the resource manager and job scheduler Slurm (https://slurm.schedmd.com/documentation.html). There are several ways to ask for resources with Slurm depending on whether you want to run an interactive job (where you keep entering commands), or want to submit a job that will run without your input when resources become available. This is explained in "Running jobs on Sherlock" <https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/>.
 
 For this bootcamp, we are going to request 2 cpus each for 3h. 
 `srun -p astraigh --time=03:00:00 --cpus-per-task=2 --pty bash`
 
-The last part of this command (--pty bash) is to create an interactive job, more specically we are requesting a bash shell.
+The last part of this command (--pty bash) is to create an interactive job, more specifically we are requesting a bash shell.
 
-You should quickly a prompt that looks like that `srun: job <ID> queued and waiting for resources` 
+You should quickly get a prompt that looks like that `srun: job <ID> queued and waiting for resources` 
 Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/biochem_minicourse_2021/teamStraight]$
-This shell is running on a dedicated computational node (here sh02-09n13). Within this shell, you'll have access to 2 CPUS and 32gB of RAM.
+This shell is running on a dedicated computational node (here sh02-09n13). Within this shell, you'll have access to 2 CPUS and 32 GB of RAM.
 
-This computational node is part of the parition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, refer to the Sherlock documentation.
+This computational node is part of the partition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, refer to the Sherlock documentation.
 
 ## Loading packages for our subsequent analysis
 
-We preinistalled some bioinformatics tools we're going to use during this bootcamp inside an anaconda environment. 
+We preinstalled some bioinformatics tools we're going to use during this bootcamp inside a conda environment. Conda is a unix package manager that helps maintain your software packages in order, and an environment is an isolated set of software packages that are required for a task or computational pipeline.
 
-First add the anaconda path to your bash profile
+First add the conda path to your bash profile with these two commands:
 
 ```
-echo -e "PATH=/home/groups/astraigh/miniconda3_py38_4.9.2/bin:$PATH" >>~/.bashrc
+echo -e "PATH=/home/groups/astraigh/miniconda3_py38_4.9.2/bin:$PATH" >> ~/.bashrc
+export PATH=/home/groups/astraigh/miniconda3_py38_4.9.2/bin:$PATH
 ```
 
 Load this environment with
