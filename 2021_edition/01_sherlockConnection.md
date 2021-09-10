@@ -51,7 +51,7 @@ You can always see your current location in the filesystem with
 pwd
 ```
 
-Now let's create a few subfolders to organize our work. We want our project directory (the team directory in that case) to look like this
+Now let's create a few subfolders to organize our work. We want our project directory (the team directory in this case) to look like this
 ```text
 teamStraight
 ├── data
