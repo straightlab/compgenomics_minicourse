@@ -66,37 +66,38 @@ A lot of basic analysis of sequencing data can be done without relying on extern
 We can see how many reads are in this file by counting the number of lines and dividing by 4
 
 ```
-wc -l raw/SRR15225353.fastq
-# 579904 SRR15225353.fastq
+wc -l raw/SRR13403380.fastq
+# 579904 SRR13403380.fastq
 # 579904/4 = 144,976 reads
 ```
 
-What is the length of each read? We need to count the number of characters for each sequence line. First let's  extract the sequences from the file. `awk` is a great unix program to manipulate text files line by line. Here we just filter lines with a number modulo 4 = 2. Let's extract the first 3 sequences. The pipe operator `|` allows us to chain commands. The parenthesis in `awk` serves as an if statement. `$0` is a variable containing the whole line.
+What is the length of each read? We need to count the number of characters for each sequence line. First let's  extract the sequences from the file. `awk` is a great unix program to manipulate text files line by line. Here we just filter lines with a number modulo 4 = 2 (line numbers divided by 4 that give a remainder of 2). 
+Let's extract the first 3 sequences (3 multiplied by 4 lines = `head -n12`). The pipe operator `|` allows us to chain commands. The parenthesis in `awk` serves as an if statement. `$0` is a variable containing the whole line.
 
 ```
-head -n12 raw/SRR15225353.fastq | awk '(NR%4==2){print $0}'
+head -n12 raw/SRR13403380.fastq | awk '(NR%4==2){print $0}'
 ```
 
 Now to get the length of these first three sequences, we just print the lengh of the line instead of the line itself
 
 ```
-head -n12 raw/SRR15225353.fastq | awk '(NR%4==2){print length($0)}'
+head -n12 raw/SRR13403380.fastq | awk '(NR%4==2){print length($0)}'
 ```
 
-Finally, we want to but a histogram of the how many times each read length is represented. For that, we need two useful commands: sort and uniq. Sort will just sort the lines, and uniq (which requires sorted input), will count (-c) how many times each unique line occurs. We're ready to do that for the whole file rather than the first three sequences so let's replace `head` with `cat`, which just reads through the whole file
+Finally, we want to build a histogram of how many times each read length is represented. For that, we need two useful commands: sort and uniq. Sort will just sort the lines, and uniq (which requires sorted input), will count (with flag `-c`) how many times each unique line occurs. We're ready to do that for the whole file rather than the first three sequences so let's replace `head` with `cat`, which just reads through the whole file
 
 ```
-cat raw/SRR15225353.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c 
+cat raw/SRR13403380.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c 
 ```
 
-We can redirect the output to a file with the `>` operator. Let's put call this file `readlength.hist.txt` and put it in a dedicated `qc` folder. One last command we may want to add to the chain of commands is an other `sort` command so that the histogram is sorted in such a way that the mode of the distribution comes first (the length that shows up the most often). This is achieved with 
+We can redirect the output to a file with the `>` operator. Let's call this file `readlength.hist.txt` and put it in a dedicated `qc` folder. One last command we may want to add to the chain of commands is an other `sort` command so that the histogram is sorted in such a way that the mode of the distribution comes first (the length that shows up the most often). This is achieved with 
 
 ```bash
 # make a directory for the qc analysis
 mkdir -p qc
 
 #create histogram and save it into a file
-cat raw/SRR15225353.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c | sort -k1,1nr > qc/readlength.hist.txt
+cat raw/SRR13403380.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c | sort -k1,1nr > qc/readlength.hist.txt
 ```
 
 We can look at this file in a scrollable way with `less`.
