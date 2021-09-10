@@ -128,7 +128,7 @@ export PATH=/home/groups/astraigh/miniconda3_py38_4.9.2/bin:$PATH
 
 Load this environment with
 ```
-source activate /home/groups/astraigh/miniconda3/envs/bootcamp
+source activate minicourse
 ```
 
 
