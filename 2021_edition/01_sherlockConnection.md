@@ -39,7 +39,7 @@ mkdir -p teamStraight
 cd teamStraight
 ```
 
-The `-p` flag is usefull in case the folder aready exists.
+The `-p` flag is useful in case the folder aready exists.
 
 This folder is currently empty. You can list the content of the current folder `.` with 
 ```
