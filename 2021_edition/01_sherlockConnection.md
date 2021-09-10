@@ -33,7 +33,7 @@ Note that `$GROUP_SCRATCH` is a bash variable, which contains the path to a defa
 echo $GROUP_SCRATCH
 ```
 
-Make a new folder for yourself, and move to that folder. For example for team CKO
+Make a new folder for yourself, and move to that folder. For example for team Straight
 ```
 mkdir -p teamStraight
 cd teamStraight
