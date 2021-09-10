@@ -137,6 +137,6 @@ NanoStat --fastq raw/SRR13403380.fastq -o qc -n nanostat.summary
 
 Questions:
 - What is the N50 for this dataset?
-- What is the median Q score
+- What is the median Q score?
 - what is the median error rate?
 
