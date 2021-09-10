@@ -1,8 +1,8 @@
 # Connection to Sherlock and familiarization with the linux shell 
 
 We will do all of our bioinformatics analysis on the Stanford High Performance Computer Cluster Sherlock (www.sherlock.stanford.edu). In this part, we will illustrate the basic workflow for connecting to the cluster and getting everything ready for a computational project. The steps are:
-- ssh into to the cluster
-- setup up our working directory
+- ssh into the cluster
+- set up our working directory
 - create a persistent session on the cluster to come back to 
 - request computational resources
 - load necessary packgages
