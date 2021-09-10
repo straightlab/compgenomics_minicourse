@@ -22,7 +22,7 @@ Let's look at the first 10 reads first
 head -n 20 raw/SRR13403380.fasta >raw/SRR13403380.head.fasta
 ```
 
-We have multipe databases installed on sherlock, which correspond to some of those available on ncbi blast online. Here, because we know we what type of samples we are dealing with we have downloaded just a few databases and combined them into one blastdb. The path of this database is  
+We have multipe databases installed on sherlock, which correspond to some of those available on ncbi blast online. Here, because we know what type of samples we are dealing with we have downloaded just a few databases and combined them into one blastdb. The path of this database is  
 ```
 /scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb
 ```
@@ -40,7 +40,7 @@ export BLASTDB=/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb
 blastn -query raw/SRR13403380.head.fasta -db /scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb -num_threads 4 >blast/rawoutput.first10.txt
 ```
 
-Taking a look at this file with `less` shows that this command returns the blast hits in a format similar to that of we ontain when running blast online. 
+Taking a look at this file with `less` shows that this command returns the blast hits in a format similar to what we obtain when running blast online. 
 
 Note we can use "process substitution" with `<()` to get the first 10 reads on the fly without having to create an intermediate file
 
