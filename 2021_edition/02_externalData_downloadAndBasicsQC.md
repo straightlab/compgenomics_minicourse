@@ -4,7 +4,6 @@
 In this part, we're going to download some sequencing data from the Gene Expression Omnibus https://www.ncbi.nlm.nih.gov/geo/, which is a public genomics data repository . For the purpose of familiarizing ourselves with accessing, downloading, and analyzing data from other groups, we will use a dataset derived from mouse sperm cells. https://www.ncbi.nlm.nih.gov/sra?term=SRX9822381
 
 
-SRR13403380
 
 Covered tools and concepts in this notebook:
 - fastq files
@@ -90,7 +89,7 @@ Finally, we want to build a histogram of how many times each read length is repr
 cat raw/SRR13403380.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c 
 ```
 
-We can redirect the output to a file with the `>` operator. Let's call this file `readlength.hist.txt` and put it in a dedicated `qc` folder. One last command we may want to add to the chain of commands is an other `sort` command so that the histogram is sorted in such a way that the mode of the distribution comes first (the length that shows up the most often). This is achieved with 
+We can redirect the output to a file with the `>` operator. Let's call this file `readlength.hist.txt` and put it in a dedicated `qc` folder. One last command we may want to add to the chain of commands is another `sort` command so that the histogram is sorted in such a way that the mode of the distribution comes first (the length that shows up the most often). This is achieved with 
 
 ```bash
 # make a directory for the qc analysis
@@ -105,35 +104,35 @@ We can look at this file in a scrollable way with `less`.
 less qc/readlength.hist.txt
 ```
 
-### QC with a dedicated tool fastqc and downloading data back
+### QC with a dedicated tool fastqc and downloading data
 The `fastqc` tool (preinstalled on the lab partition) can be used to get some other qc metrics, in particular about sequencing quality and overrepresentated sequences.
 
 ```
-fastqc raw/SRR15225353.fastq -o qc/ -t 2 
+fastqc raw/SRR13403380.fastq -o qc/ -t 2 
 ```
 
 This produced an html file, which we need to download to our computer to look at. File transfer operations to and from Sherlock are best done using `rsync`
 
 Open a new terminal tab in your computer, and then run 
 ```
-# replace teamStraight with your folder name!
-rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2021/teamStraight/data/external/qc/SRR15225353_fastqc.html ~/Downloads
+# replace teamStraight with your folder name, and replace ~/Downloads if necessary
+rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2021/teamStraight/data/external/qc/SRR13403380_fastqc.html ~/Downloads
 
 ```
-The command has the form `rsync <option flags> [source path] [destination path]`.  The optional flags -vh and --progress are just to tune the behavior of rsync and tell it to display progress in a nice way (-vh --prgress) and -a is to preserve timestamps on files. 
+The command has the form `rsync <option flags> [source path] [destination path]`.  The optional flags `-vh` and `--progress` are just to tune the behavior of rsync and tell it to display progress in a nice way and `-a` is to preserve timestamps on files. 
 
-The source in on sherlock, and more specifically for file transfer we want to use a dedicated file transfer node on sherlock `dtn`. The targt path is just your local Download directory.
+The source in on sherlock, and more specifically for file transfer we want to use a dedicated file transfer node on sherlock `dtn`. The target path in this example is your local Download directory.
 
 Now let's take a look. On you local terminal, run
 ```
-open ~/Dowloads/SRR15225353_fastqc.html
+open ~/Dowloads/SRR13403380_fastqc.html
 ```
 
 ### NanoStat
 Another simple tool which produces qc metrics more relevant to long read data is `NanoStat`
 
 ```bash
-NanoStat --fastq raw/SRR15225353.fastq -o qc -n nanostat.summary
+NanoStat --fastq raw/SRR13403380.fastq -o qc -n nanostat.summary
 ```
 
 Questions:
@@ -141,5 +140,3 @@ Questions:
 - What is the median Q score
 - what is the median error rate?
 
-## References
-Haggerty C, Kretzmer H, Riemenschneider C, Kumar AS, Mattei AL, Bailly N, Gottfreund J, Giesselmann P, Weigert R, Brändl B, Giehr P, Buschow R, Galonska C, von Meyenn F, Pappalardi MB, McCabe MT, Wittler L, Giesecke-Thiel C, Mielke T, Meierhofer D, Timmermann B, Müller FJ, Walter J, Meissner A. Dnmt1 has de novo activity targeted to transposable elements. Nat Struct Mol Biol. 2021 Jul;28(7):594-603. doi: 10.1038/s41594-021-00603-8. Epub 2021 Jun 17. PMID: 34140676; PMCID: PMC8279952.
