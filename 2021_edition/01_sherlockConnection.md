@@ -129,6 +129,7 @@ export PATH=/home/groups/astraigh/miniconda3_py38_4.9.2/bin:$PATH
 Load this environment with
 ```
 conda activate minicourse
+(alternatively /home/groups/astraigh/miniconda3_py38_4.9.2/envs/minicourse)
 ```
 
 
