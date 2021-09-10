@@ -55,9 +55,8 @@ Now let's create a few subfolders to organize our work. We want our project dire
 ```text
 teamStraight
 ├── data
-│   └── sample1
-|   └── sample2
-|   └── external_dat
+│   └── samples
+|   └── external
 └──tmp
 ```
 
@@ -66,7 +65,7 @@ teamStraight
 
 Make these directories with 
 ```bash
-mkdir -p data/sample1 sample2 external_dat
+mkdir -p data/samples external
 ```
 Verify the tree scructure with 
 ```bash
@@ -123,12 +122,12 @@ We preinistalled some bioinformatics tools we're going to use during this bootca
 First add the anaconda path to your bash profile
 
 ```
-echo -e "PATH=/share/PI/astraigh/miniconda3/bin:$PATH" >>~/.bashrc
+echo -e "PATH=/home/groups/astraigh/miniconda3_py38_4.9.2/bin:$PATH" >>~/.bashrc
 ```
 
 Load this environment with
 ```
-source activate bootcamp
+source activate /home/groups/astraigh/miniconda3/envs/bootcamp
 ```
 
 
