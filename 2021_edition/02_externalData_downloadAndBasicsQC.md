@@ -3,7 +3,7 @@
 ## Goals
 In this notebook, we're going to download some sequencing data from the Gene Expression Omnibus https://www.ncbi.nlm.nih.gov/geo/, which is a public genomics data repository . For the purpose of familiarizing ourselves with accessing, downloading, and analyzing data from other groups, we will use a dataset derived from mouse embryonic stem cells (Haggerty et al 2021). https://www.ncbi.nlm.nih.gov/sra?term=SRX11531301
 
-Mouse long read sequencing paper: (Haggerty C, Kretzmer H, Riemenschneider C, Kumar AS, Mattei AL, Bailly N, Gottfreund J, Giesselmann P, Weigert R, Brändl B, Giehr P, Buschow R, Galonska C, von Meyenn F, Pappalardi MB, McCabe MT, Wittler L, Giesecke-Thiel C, Mielke T, Meierhofer D, Timmermann B, Müller FJ, Walter J, Meissner A. Dnmt1 has de novo activity targeted to transposable elements. Nat Struct Mol Biol. 2021 Jul;28(7):594-603. doi: 10.1038/s41594-021-00603-8. Epub 2021 Jun 17. PMID: 34140676; PMCID: PMC8279952.)
+
 
 
 Covered tools and concepts in this notebook:
@@ -66,27 +66,27 @@ A lot of basic analysis of sequencing data can be done without relying on extern
 We can see how many reads are in this file by counting the number of lines and dividing by 4
 
 ```
-wc -l raw/SRR8351023.fastq
-# 579904 SRR8351023.fastq
+wc -l raw/SRR15225353.fastq
+# 579904 SRR15225353.fastq
 # 579904/4 = 144,976 reads
 ```
 
 What is the length of each read? We need to count the number of character for each sequence line. First let's  extract the sequences from the file. `awk` is a great unix program to manipulate text files line by line. Here we just filter lines with a number modulo 4 = 2. Let's extract the first 3 sequences. The pipe operator `|` allows us to chain commands. The parenthesis in `awk` serves as an if statement. `$0` is a variable containing the whole line.
 
 ```
-head -n12 raw/SRR8351023.fastq | awk '(NR%4==2){print $0}'
+head -n12 raw/SRR15225353.fastq | awk '(NR%4==2){print $0}'
 ```
 
 Now to get the length of these first three sequences, we just print the lengh of the line instead of the line itself
 
 ```
-head -n12 raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)}'
+head -n12 raw/SRR15225353.fastq | awk '(NR%4==2){print length($0)}'
 ```
 
 Finally, we want to but a histogram of the how many times each read length is represented. For that, we need two useful commands: sort and uniq. Sort will just sort the lines, and uniq (which requires sorted input), will count (-c) how many times each unique line occurs. We're ready to do that for the whole file rather than the first three sequences so let's replace `head` with `cat`, which just reads through the whole file
 
 ```
-cat raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c 
+cat raw/SRR15225353.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c 
 ```
 
 We can redirect the output to a file with the `>` operator. Let's put call this file `readlength.hist.txt` and put it in a dedicated `qc` folder. One last command we may want to add to the chain of commands is an other `sort` command so that the histogram is sorted in such a way that the mode of the distribution comes first (the length that shows up the most often). This is achieved with 
@@ -96,7 +96,7 @@ We can redirect the output to a file with the `>` operator. Let's put call this 
 mkdir -p qc
 
 #create histogram and save it into a file
-cat raw/SRR8351023.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c | sort -k1,1nr > qc/readlength.hist.txt
+cat raw/SRR15225353.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c | sort -k1,1nr > qc/readlength.hist.txt
 ```
 
 We can look at this file in a scrollable way with `less`.
@@ -108,15 +108,15 @@ less qc/readlength.hist.txt
 The `fastqc` tool (preinstalled on the lab partition) can be used to get some other qc metrics, in particular about sequencing quality and overrepresentated sequences.
 
 ```
-fastqc raw/SRR8351023.fastq -o qc/ -t 2 
+fastqc raw/SRR15225353.fastq -o qc/ -t 2 
 ```
 
 This produced an html file, which we need to download to our computer to look at. File transfer operations to and from Sherlock are best done using `rsync`
 
 Open a new terminal tab in your computer, and then run 
 ```
-# replace teamCKO with your folder name!
-rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/genomics_minicourse/teamCKO/data/mock12/qc/SRR8351023_fastqc.html ~/Downloads
+# replace teamStraight with your folder name!
+rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2021/teamStraight/data/external/qc/SRR15225353_fastqc.html ~/Downloads
 
 ```
 The command has the form `rsync <option flags> [source path] [destination path]`.  The optional flags -vh and --progress are just to tune the behavior of rsync and tell it to display progress in a nice way (-vh --prgress) and -a is to preserve timestamps on files. 
@@ -125,14 +125,14 @@ The source in on sherlock, and more specifically for file transfer we want to us
 
 Now let's take a look. On you local terminal, run
 ```
-open ~/Dowloads/SRR8351023_fastqc.html
+open ~/Dowloads/SRR15225353_fastqc.html
 ```
 
 ### NanoStat
 Another simple tool which produces qc metrics more relevant to long read data is `NanoStat`
 
 ```bash
-NanoStat --fastq raw/SRR8351023.fastq -o qc -n nanostat.summary
+NanoStat --fastq raw/SRR15225353.fastq -o qc -n nanostat.summary
 ```
 
 Questions:
@@ -141,7 +141,4 @@ Questions:
 - what is the median error rate?
 
 ## References
-<a id="1">[1]</a> 
-Sevim, V., Lee, J., Egan, R. et al. Shotgun metagenome data of a defined mock community using Oxford Nanopore, PacBio and Illumina technologies. 
-Sci Data 6, 285 (2019). 
-https://doi.org/10.1038/s41597-019-0287-z
+Haggerty C, Kretzmer H, Riemenschneider C, Kumar AS, Mattei AL, Bailly N, Gottfreund J, Giesselmann P, Weigert R, Brändl B, Giehr P, Buschow R, Galonska C, von Meyenn F, Pappalardi MB, McCabe MT, Wittler L, Giesecke-Thiel C, Mielke T, Meierhofer D, Timmermann B, Müller FJ, Walter J, Meissner A. Dnmt1 has de novo activity targeted to transposable elements. Nat Struct Mol Biol. 2021 Jul;28(7):594-603. doi: 10.1038/s41594-021-00603-8. Epub 2021 Jun 17. PMID: 34140676; PMCID: PMC8279952.
