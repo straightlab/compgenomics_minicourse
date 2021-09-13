@@ -82,9 +82,10 @@ Let's run blast using this database. We will put the blast output in a `blast` f
 
 ```bash
 #create folder for output
+cd $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX
 mkdir -p blast
 
-#this is just a technical thing for blast to know where to find the taxonomy information
+#We can set a variable for this blast database so we don't have to type out the full path eachtime
 export BLASTDB=/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_db.nal
 
 #run blast
@@ -107,5 +108,4 @@ We can instead ask blast to produce a tabulated output, which is more computatio
 blastn -query <(head -n 100 basecalled/mysample.fasta.head.fasta) -db BLASTDB -num_threads 4 -subject_besthit -outfmt "6 qseqid sseqid pident length mismatches gapopen evalue bitscore ssciname staxid sskingdom" > blast/mysample_tabulated.output.first50.txt
 ```
 
-As you can see, blast takes a long time to run, and there is an additionnal complexity which is that it returns more than one hit per read.
 
