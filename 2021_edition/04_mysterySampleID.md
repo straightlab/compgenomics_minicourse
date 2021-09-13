@@ -63,14 +63,14 @@ Blast takes a fasta as an input, so we need to convert the fastq into fasta.
 export me="teamStraight"
 
 #move to the folder for this dataset
-cd $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/external
+cd $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/
 
-awk '(NR%4==1){print ">"$0; getline; print $0}' raw/SRR15225353.fastq >raw/SRR15225353.fasta
+awk '(NR%4==1){print ">"$0; getline; print $0}' basecalled/mysample.fastq > basecalled/mysample.fasta
 ```
 
 Let's look at the first 10 reads first
 ```
-head -n 20 raw/SRR15225353.fasta >raw/SRR15225353.head.fasta
+head -n 20 basecalled/mysample.fasta > basecalled/mysample.fasta.head.fasta
 ```
 
 We have multipe databases installed on sherlock, which correspond to some of those available on ncbi blast online. Here, because we know we what type of samples we are dealing with we have downloaded just a few databases and combined them into one blastdb. The path of this database is  
