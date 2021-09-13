@@ -102,7 +102,7 @@ head -n 100 basecalled/guppy/split/barcode20/merged/mysample.fasta > basecalled/
 
 We have multipe databases installed on sherlock, which correspond to some of those available on ncbi blast online. Here, because we know we what type of samples we are dealing with we have downloaded just a few databases and combined them into one blastdb. The path of this database is  
 ```
-/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_db.nal
+/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_final
 ```
 
 Let's run blast using this database. We will put the blast output in a `blast` folder
@@ -113,7 +113,7 @@ cd $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX
 mkdir -p blast
 
 #We can set a variable for this blast database so we don't have to type out the full path eachtime
-export BLASTDB=/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_db.nal
+export BLASTDB=/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_final
 
 #run blast
 blastn -query basecalled/guppy/split/barcode20/merged/mysample.head.fasta -db BLASTDB -num_threads 4 > blast/mysample.rawoutput.first50.txt
