@@ -17,62 +17,70 @@ mkdir sampleX
 mkdir sampleX/basecalled
 
 #Now we want to define a variable that points to your sample's fast5s. 
-We have uploaded the data from each sample to the following directory. Swap sampleX for your sample number.
+#We have uploaded the data from each sample to the following directory. Swap sampleX for your sample number.
 
 fast5s=$GROUP_SCRATCH/biochem_minicourse_2021/shared/class_dat/sampleX
-
-#Call guppy_basecaller & point to your fast5 files in the shared folder. 
+```
+Call guppy_basecaller & point to your fast5 files in the shared folder. 
 
 Guppy takes an input_path, save_path, and config as inputs. Input_path is the directory where your fast5 files are located (in shared/class_dat/sampleX). Save_path is the directory where guppy will output the resulting fastq files. Config refers to the specific settings we input into guppy. We don't need to change any of these settings to we'll leave that as is.
 
+```
 /home/groups/astraigh/software/ont-guppy-cpu/bin/guppy_basecaller --input_path $fast5s --save_path "$GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled" --config /home/groups/astraigh/software/ont-guppy-cpu/data/dna_r9.4.1_450bps_fast.cfg --num_callers 2
+```
+Demultiplex
 
-#Demultiplex
 Because we multiplexed our samples to sequence multiple samples in one run, we will now run a program that computationally separates our samples based on the barcode sequence.
 
-We'll start by making a director for the split data
+We'll start by making a directory for the split data:
+```
 mkdir -p $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/split
 
-/home/groups/astraigh/software/ont-guppy-cpu/bin/guppy_barcoder --input_path "$GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/guppy/pass" --save_path "$GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/guppy/split" --config /home/groups/astraigh/software/ont-guppy-cpu/data/barcoding/configuration.cfg -t 2
-
+/home/groups/astraigh/software/ont-guppy-cpu/bin/guppy_barcoder --input_path "$GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/pass" --save_path "$GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/split" --config /home/groups/astraigh/software/ont-guppy-cpu/data/barcoding/configuration.cfg -t 2
+```
 We can now change to the output directory & list the contents to see what guppy output
-
-cd $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/guppy/split
+```
+cd $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/split
 ls 
-
+```
 To combine the output fastqs, we'll first create a merged folder & then cat the multiple fastqs together. 
-
-mkdir -p /split/barcode20/merged
+```
+mkdir -p /split/barcode*/merged
 cd /barcode20/merged
-cat ./*.fastq > "$GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/guppy/split/barcode20/merged/final.fastq"
+cat ./*.fastq > "$GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/split/barcode20/merged/final.fastq"
+```
 
-
-##BasicQC
+## BasicQC
 As we did earlier for our downloaded data, we'll take a look at the quality of our sequencing run.
 
-# make a directory for the qc analysis
+make a directory for the qc analysis:
+```
 cd $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/
 mkdir -p qc
-
-#create histogram and save it into a file. 
+```
+Create histogram and save it into a file. 
 Replace my_fastq with the output file name from guppy.
-
+```
 $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/guppy/split/barcode20/merged/final.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c | sort -k1,1nr > qc/readlength.hist.txt
 
 less qc/readlength.hist.txt
-
-#Using FastQC
+```
+Using FastQC
+```
 fastqc basecalled/guppy/split/barcode20/merged/final.fastq -o qc/ -t 2 
-
-Transfer the output file to the Downloads folder on your computer. Be sure to change the directory to match your fastqc output. 
+```
+Transfer the output file to the Downloads folder on your computer. Be sure to change the directory to match your fastqc output.
+```
 rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2021/teamStraight/data/sampleX/qc/my_fastqc.html ~/Downloads
-
+```
 Run on your local terminal:
+```
 open ~/Dowloads/my_fastqc.html
-
+```
 #Using Nanostat
+```
 NanoStat --fastq basecalled/guppy/split/barcode20/merged/final.fastq -o qc -n nanostat.summary
-
+```
 
 ## Blast
 
@@ -113,14 +121,15 @@ blastn -query basecalled/guppy/split/barcode20/merged/mysample.head.fasta -db BL
 ```
 
 Taking a look at this file with `less` shows that this command returns the blast hits in a format similar to that of we ontain when running blast online. 
+```
+less blast/mysample.rawoutput.first50.txt
+```
 
 Note we can use "process substitution" with `<()` to get the first 50 reads on the fly without having to create an intermediate file
 
 ```
 blastn -query <(head -n 100 basecalled/guppy/split/barcode20/merged/mysample.fasta) -db BLASTDB -num_threads 4 > blast/mysample.rawoutput.first50.txt
-```
-
-Taking a look at this file with `less` shows that this command returns the blast hits in a format similar to the format we obtain when running blast online. 
+``` 
 
 We can instead ask blast to produce a tabulated output, which is more computationally friendy, using the `--outfmt 6` flag.
 
