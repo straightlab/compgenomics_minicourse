@@ -103,6 +103,10 @@ head -n 100 basecalled/guppy/split/barcode20/merged/mysample.fasta > basecalled/
 We have multipe databases installed on sherlock, which correspond to some of those available on ncbi blast online. Here, because we know we what type of samples we are dealing with we have downloaded just a few databases and combined them into one blastdb. The path of this database is  
 ```
 /scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_final
+
+#We can set a variable for this blast database so we don't have to type out the full path eachtime
+myblastdb=/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_final
+
 ```
 
 Let's run blast using this database. We will put the blast output in a `blast` folder
@@ -112,11 +116,11 @@ Let's run blast using this database. We will put the blast output in a `blast` f
 cd $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX
 mkdir -p blast
 
-#We can set a variable for this blast database so we don't have to type out the full path eachtime
-export BLASTDB=/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_final
+#We also need to point blast to the taxonomy database which we can do by running the following:
+export BLASTDB="/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb"
 
 #run blast
-blastn -query basecalled/guppy/split/barcode20/merged/mysample.head.fasta -db BLASTDB -num_threads 4 > blast/mysample.rawoutput.first50.txt
+blastn -query basecalled/guppy/split/barcode20/merged/mysample.head.fasta -db $myblastdb -num_threads 4 > blast/mysample.rawoutput.first50.txt
 ```
 
 Taking a look at this file with `less` shows that this command returns the blast hits in a format similar to that of we ontain when running blast online. 
@@ -127,13 +131,13 @@ less blast/mysample.rawoutput.first50.txt
 Note we can use "process substitution" with `<()` to get the first 50 reads on the fly without having to create an intermediate file
 
 ```
-blastn -query <(head -n 100 basecalled/guppy/split/barcode20/merged/mysample.fasta) -db BLASTDB -num_threads 4 > blast/mysample.rawoutput.first50.txt
+blastn -query <(head -n 100 basecalled/guppy/split/barcode20/merged/mysample.fasta) -db $myblastdb -num_threads 4 > blast/mysample.rawoutput.first50.txt
 ``` 
 
 We can instead ask blast to produce a tabulated output, which is more computationally friendy, using the `--outfmt 6` flag.
 
 ```
-blastn -query <(head -n 100 basecalled/guppy/split/barcode20/merged/mysample.fasta) -db BLASTDB -num_threads 4 -subject_besthit -outfmt "6 qseqid sseqid pident length mismatches gapopen evalue bitscore ssciname staxid sskingdom" > blast/mysample_tabulated.output.first50.txt
+blastn -query <(head -n 100 basecalled/guppy/split/barcode20/merged/mysample.fasta) -db $myblastdb -num_threads 4 -subject_besthit -outfmt "6 stitle mismatches gapopen evalue" > blast/mysample_tabulated.output.first50.txt
 ```
 
-
+There are several other output format options that you can use to customize blast's output. More info here: https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.options_common_to_all_blast/
