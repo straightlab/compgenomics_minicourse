@@ -21,17 +21,16 @@ mkdir sampleX/basecalled
 
 fast5s=$GROUP_SCRATCH/biochem_minicourse_2021/shared/class_dat/sampleX
 ```
-Call guppy_basecaller & point to your fast5 files in the shared folder. 
+**Basecall**
 
 Guppy takes an input_path, save_path, and config as inputs. Input_path is the directory where your fast5 files are located (in shared/class_dat/sampleX). Save_path is the directory where guppy will output the resulting fastq files. Config refers to the specific settings we input into guppy. We don't need to change any of these settings to we'll leave that as is.
 
 ```
 /home/groups/astraigh/software/ont-guppy-cpu/bin/guppy_basecaller --input_path $fast5s --save_path "$GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled" --config /home/groups/astraigh/software/ont-guppy-cpu/data/dna_r9.4.1_450bps_fast.cfg --num_callers 2
 ```
-Demultiplex
+**Demultiplex**
 
 Because we multiplexed our samples to sequence multiple samples in one run, we will now run a program that computationally separates our samples based on the barcode sequence.
-
 We'll start by making a directory for the split data:
 ```
 mkdir -p $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/sampleX/basecalled/split
