@@ -32,7 +32,7 @@ mkdir raw
 Note: the following command takes a bit of time, so we've already downloaded the file into our directory. Use the cp command to copy from our dir to yours (this is the first 100000 lines from the full fastq file).
 fasterq-dump SRR13403380 --progress --threads 2 --temp $GROUP_SCRATCH/biochem_minicourse_2021/$me/tmp/ --outdir ./raw
 
-cp $GROUP_SCRATCH/biochem_minicourse_2021/teamStraight/data/external/raw/SRR13403380_head.fastq ./raw
+cp $GROUP_SCRATCH/biochem_minicourse_2021/teamStraight/data/external/raw/SRR13403380_subset.fastq ./raw
 ```
 
 Let's do some quick inspection of the data we downloaded.
@@ -44,7 +44,7 @@ We can see the previous command just downloaded a file called `SRR13403380.fastq
 This is a fastq formatted file, which is the standard format for sequencing data. We can figure out how the file is organized by looking at the first 10 lines.
 
 ```
-head raw/SRR13403380_head.fastq
+head raw/SRR13403380_subset.fastq
 ```
 
 This is of the form 
@@ -86,7 +86,7 @@ head -n12 raw/SRR13403380_subset.fastq | awk '(NR%4==2){print $0}'
 Now to get the length of these first three sequences, we just print the lengh of the line instead of the line itself
 
 ```
-head -n12 raw/SRR13403380_SRR13403380.fastq | awk '(NR%4==2){print length($0)}'
+head -n12 raw/SRR13403380_subset.fastq | awk '(NR%4==2){print length($0)}'
 ```
 
 Finally, we want to build a histogram of how many times each read length is represented. For that, we need two useful commands: sort and uniq. Sort will just sort the lines, and uniq (which requires sorted input), will count (with flag `-c`) how many times each unique line occurs. We're ready to do that for the whole file rather than the first three sequences so let's replace `head` with `cat`, which just reads through the whole file
