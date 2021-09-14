@@ -105,7 +105,7 @@ We have multipe databases installed on sherlock, which correspond to some of tho
 /scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_final
 
 #We can set a variable for this blast database so we don't have to type out the full path eachtime
-myblastdb=/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_final
+export myblastdb=/scratch/groups/astraigh/biochem_minicourse_2021/shared/blastdb/full_final
 
 ```
 
@@ -143,7 +143,7 @@ Let's sort the output and print the uniq entries
 ```
 less /scratch/groups/astraigh/biochem_minicourse_2021/practice_run/pool_trial1/blast/bar01_test_tabulated.output.first1000.txt | awk '{print $1,$2}' | sort | uniq -c
 ```
-
+Based on the blast output, which organism do you think each DNA sample came from?
 
 
 There are several other output format options that you can use to customize blast's output. More info here: https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.options_common_to_all_blast/
