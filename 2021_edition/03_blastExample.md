@@ -14,7 +14,7 @@ export me="teamStraight"
 #move to the folder for this dataset
 cd $GROUP_SCRATCH/biochem_minicourse_2021/$me/data/external
 
-awk '(NR%4==1){print ">"$0; getline; print $0}' raw/SRR13403380.fastq >raw/SRR13403380.fasta
+awk '(NR%4==1){print ">"$0; getline; print $0}' raw/SRR13403380_subset.fastq >raw/SRR13403380.fasta
 ```
 
 Let's look at the first 10 reads first
