@@ -56,6 +56,6 @@ Taking a look at this file with `less` shows that this command returns the blast
 We can instead ask blast to produce a tabulated output, which is more computationally friendy, using the `--outfmt 6` flag.
 
 ```
-blastn -query <(head -n 20 raw/SRR13403380.fasta) -db $myblastdb -num_threads 4 -subject_besthit -outfmt "6 stitle positive evalue" > blast/tabulated.output.first10.txt
+blastn -query <(head -n 20 raw/SRR13403380.fasta) -db $myblastdb -num_threads 4 -subject_besthit -outfmt "6 stitle score" > blast/tabulated.output.first10.txt
 ```
 
