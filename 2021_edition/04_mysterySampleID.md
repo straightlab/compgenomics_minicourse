@@ -137,11 +137,11 @@ blastn -query <(head -n 100 basecalled/guppy/split/barcode20/merged/mysample.fas
 We can instead ask blast to produce a tabulated output, which is more computationally friendy, using the `--outfmt 6` flag.
 
 ```
-blastn -query <(head -n 100 basecalled/guppy/split/barcode20/merged/mysample.fasta) -db $myblastdb -num_threads 2 -subject_besthit -culling_limit 2 -outfmt "6 stitle evalue mismatches gapopen" > blast/mysample_tabulated.output.first50.txt
+blastn -query <(head -n 100 basecalled/guppy/split/barcodeX/merged/mysample.fasta) -db $myblastdb -num_threads 2 -subject_besthit -culling_limit 2 -outfmt "6 stitle score mismatches" > blast/mysample_tabulated.output.first50.txt
 ```
 Let's sort the output and print the uniq entries
 ```
-less /scratch/groups/astraigh/biochem_minicourse_2021/practice_run/pool_trial1/blast/bar01_test_tabulated.output.first1000.txt | awk '{print $1,$2}' | sort | uniq -c
+cat blast/bar01_tabulated.output.first50_kf.txt | awk '{print $1,$2,$(NF-1)}' | sort -k3,3 -nr
 ```
 Based on the blast output, which organism do you think each DNA sample came from?
 
