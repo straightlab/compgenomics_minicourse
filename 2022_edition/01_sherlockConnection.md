@@ -26,7 +26,7 @@ ssh <username>@login.sherlock.stanford.edu
 ## Setting up our workspace for the project.
 Go to the group minicourse directory
 ```
-cd $GROUP_SCRATCH/biochem_minicourse_2021
+cd $GROUP_SCRATCH/biochem_minicourse_2022
 ```
 Note that `$GROUP_SCRATCH` is a bash variable, which contains the path to a default "scratch" folder for our lab. You can see the content of this variable with
 ```
@@ -35,18 +35,16 @@ echo $GROUP_SCRATCH
 
 Make a new folder for yourself, and move to that folder. For example for team Straight
 ```
-mkdir -p teamStraight
+mkdir teamStraight
 cd teamStraight
 ```
-
-The `-p` flag is useful in case the folder aready exists.
 
 This folder is currently empty. You can list the content of the current folder `.` with 
 ```
 ls .
 ```
 
-You can always see your current location in the filesystem with 
+You can always see your current location in the filesystem with  
 ```
 pwd
 ```
@@ -65,7 +63,7 @@ teamStraight
 
 Make these directories with 
 ```bash
-mkdir -p data/samples external
+mkdir data/samples external
 ```
 Verify the tree structure with 
 ```bash
