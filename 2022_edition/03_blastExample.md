@@ -24,7 +24,7 @@ head -n 20 SRR13403380_subset.fasta > SRR13403380.head.fasta
 
 We have multipe databases installed on sherlock, which correspond to some of those available on ncbi blast online. Here, because we know what type of samples we are dealing with we have downloaded just a few databases and combined them into one blastdb. The path of this database is  
 ```
-/scratch/groups/astraigh/biochem_minicourse_2022/straightlab/blastdb/combined
+/scratch/groups/astraigh/biochem_minicourse_2022/straightlab/blastdb/combined_db
 ```
 
 Let's run blast using this database. We will put the blast output in a `blast` folder
@@ -34,7 +34,7 @@ Let's run blast using this database. We will put the blast output in a `blast` f
 mkdir -p blast
 
 #we can set a variable for this blast database so we don't have to type out the full path everytime
-myblastdb=/scratch/groups/astraigh/biochem_minicourse_2022/straightlab/blastdb/combined
+myblastdb=/scratch/groups/astraigh/biochem_minicourse_2022/straightlab/blastdb/combined_db
 
 #run blast
 blastn -query SRR13403380.head.fasta -db $myblastdb -num_threads 2 > blast/SRR13403380_rawoutput.first10.txt
