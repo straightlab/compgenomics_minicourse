@@ -35,13 +35,13 @@ echo $GROUP_SCRATCH
 
 Make a new folder for yourself, and move to that folder. For example for team Straight
 ```
-mkdir teamStraight
-cd teamStraight
+mkdir <your_dir_name>
+cd <your_dir_name>
 ```
 
-This folder is currently empty. You can list the content of the current folder `.` with 
+This folder is currently empty. You can list the content of the current folder with 
 ```
-ls .
+ls 
 ```
 
 You can always see your current location in the filesystem with  
@@ -51,7 +51,7 @@ pwd
 
 Now let's create a few subfolders to organize our work. We want our project directory (the team directory in this case) to look like this
 ```text
-teamStraight
+<your_dir_name>
 ├── data
 │   └── samples
 |   └── external
@@ -63,7 +63,11 @@ teamStraight
 
 Make these directories with 
 ```bash
-mkdir data/samples external
+mkdir data
+
+mkdir data/samples data/external
+
+mkdir tmp
 ```
 Verify the tree structure with 
 ```bash
@@ -78,7 +82,7 @@ What happens if I am in the middle of some task on Sherlock and I lose internet 
 screen -S genomics
 ```
 
-This creates a new session called genomics. Let's demonstrate what it does by putting a mark in our terminal, leaving and coming back
+This creates a new session called genomics. Let's demonstrate what it does by putting a mark in our terminal, leaving and then coming back
 
 ```bash
 # leave a mark
@@ -93,7 +97,7 @@ ssh sunetid@login.sherlock.stanford.edu
 ssh sh01-ln03
 
 # get back to you persistent session
-screen -r
+screen -x
 ```
 
 ## Getting computational resources on Sherlock
@@ -103,12 +107,10 @@ When we ssh into sherlock, we automatically obtain a shell on a "login node". So
 For anything more computationally heavy than that, you need to request dedicated resources (in fact, if you run a command on a login node that takes too long to complete or requests too much memory, it will automatically get aborted). The way to ask for resources on Sherlock is through the resource manager and job scheduler Slurm (https://slurm.schedmd.com/documentation.html). There are several ways to ask for resources with Slurm depending on whether you want to run an interactive job (where you keep entering commands), or want to submit a job that will run without your input when resources become available. This is explained in "Running jobs on Sherlock" <https://www.sherlock.stanford.edu/docs/user-guide/running-jobs/>.
 
 For this bootcamp, we are going to request 2 cpus each for 3h. 
-`srun -p astraigh --time=03:00:00 --cpus-per-task=2 --pty bash`
+`salloc -p astraigh --time=03:00:00 --cpus-per-task=2`
 
-The last part of this command (--pty bash) is to create an interactive job, more specifically we are requesting a bash shell.
-
-You should quickly get a prompt that looks like that `srun: job <ID> queued and waiting for resources` 
-Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/biochem_minicourse_2021/teamStraight]$
+You should quickly get a prompt that looks like that `salloc: Pending job allocation <ID>` 
+Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/biochem_minicourse_2022/<your_dir_name>]$
 This shell is running on a dedicated computational node (here sh02-09n13). Within this shell, you'll have access to 2 CPUS and 32 GB of RAM.
 
 This computational node is part of the partition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, refer to the Sherlock documentation.
