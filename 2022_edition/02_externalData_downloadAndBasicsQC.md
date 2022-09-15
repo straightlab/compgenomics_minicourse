@@ -108,7 +108,7 @@ less readlength.hist.txt
 The `fastqc` tool (preinstalled on the lab partition) can be used to get some other qc metrics, in particular about sequencing quality and overrepresentated sequences.
 
 ```
-fastqc SRR13403380_subset.fastq -o . -t 2 
+fastqc SRR13403380_subset.fastq -t 2 
 ```
 
 This produced an html file, which we need to download to our computer to look at. File transfer operations to and from Sherlock are best done using `rsync`
