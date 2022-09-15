@@ -70,7 +70,7 @@ wc -l SRR13403380_subset.fastq
 # 100000/4 = 250000 reads
 
 #we can do the same for the full file
-wc -l /scratch/groups/astraigh/biochem_minicourse_2021/straightlab/data/external/raw/SRR13403380.fastq
+wc -l /scratch/groups/astraigh/biochem_minicourse_2022/straightlab/data/external/SRR13403380.fastq
 ```
 
 What is the length of each read? We need to count the number of characters for each sequence line. First let's  extract the sequences from the file. `awk` is a great unix program to manipulate text files line by line. Here we just filter lines with a number modulo 4 = 2 (line numbers divided by 4 that give a remainder of 2). 
