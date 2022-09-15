@@ -36,7 +36,7 @@ Let's do some quick inspection of the data we downloaded.
 ```
 ls -lh 
 ```
-We can see the previous command just downloaded a file called `SRR13403380.fastq` wich is 940Mb in size
+We can see the previous command just downloaded a file called `SRR13403380.fastq` wich is 897Mb in size
 
 This is a fastq formatted file, which is the standard format for sequencing data. We can figure out how the file is organized by looking at the first 10 lines.
 
