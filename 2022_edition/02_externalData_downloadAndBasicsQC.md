@@ -132,7 +132,7 @@ open ~/Dowloads/SRR13403380_subset_fastqc.html
 Another simple tool which produces qc metrics more relevant to long read data is `NanoStat`
 
 ```bash
-NanoStat --fastq SRR13403380_subset.fastq -o ./ -n nanostat.summary
+NanoStat --fastq SRR13403380_subset.fastq -n nanostat.summary
 ```
 
 Questions:
