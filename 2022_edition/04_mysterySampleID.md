@@ -17,7 +17,7 @@ mkdir sampleX
 ```
 Copy the data for your sample from the straightlab foler. Change sampleX to your sameple number (ie. sample2). Repeat this for each sample number for your group
 ```
-cp $GROUP_SCRATCH/biochem_minicourse_2022/straightlab/data/samples/sampleX.fastq $me/data/saamples
+cp $GROUP_SCRATCH/biochem_minicourse_2022/straightlab/data/samples/sampleX.fastq $me/data/samples
 ```
 
 ## BasicQC
