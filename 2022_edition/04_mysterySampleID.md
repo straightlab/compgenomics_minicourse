@@ -24,7 +24,7 @@ cp $GROUP_SCRATCH/biochem_minicourse_2022/straightlab/data/samples/sampleX.fastq
 As we did earlier for our downloaded data, we'll take a look at the quality of our sequencing run.
 
 ```
-cd $GROUP_SCRATCH/biochem_minicourse_2022/$me/data/samples
+cd $me/data/samples
 ```
 Create histogram and save it into a file. 
 Replace sampleX with the sample# for your group in both the input fastq file & the output readlength histogram file
@@ -79,7 +79,7 @@ Let's run blast using this database. We will put the blast output in a `blast` f
 
 ```bash
 #create folder for output
-cd $GROUP_SCRATCH/biochem_minicourse_2022/$me/data/samples
+cd $me/data/samples
 mkdir blast
 
 #run blast
