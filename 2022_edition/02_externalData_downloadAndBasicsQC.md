@@ -126,7 +126,7 @@ The source in on sherlock, and more specifically for file transfer we want to us
 
 Now let's take a look. Start a new terminal window on your local computer (not on sherlock) & run:
 ```
-open ~/Dowloads/SRR13403380_subset_fastqc.html
+open ~/Downloads/SRR13403380_subset_fastqc.html
 ```
 
 ### NanoStat
@@ -134,6 +134,8 @@ Another simple tool which produces qc metrics more relevant to long read data is
 
 ```bash
 NanoStat --fastq SRR13403380_subset.fastq -n nanostat.summary
+
+head nanostat.summary
 ```
 
 Questions:
