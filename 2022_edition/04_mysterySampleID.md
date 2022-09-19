@@ -99,7 +99,7 @@ blastn -query <(head -n 100 sampleX.fasta) -db $myblastdb -num_threads 2 -subjec
 ```
 Let's sort the output and print the uniq entries
 ```
-cat blast/sampleX_tabulated.output.first50.txt | awk '{print $1,$2,$(NF)}' | sort -k3,3 -nr
+cat blast/sampleX_tabulated.output.first50.txt | awk '{print $1,$2,$(NF)}' | sort -k3,3 -nr > blast/sampleX_tabulated.output.first50.tsv
 ```
 Based on the blast output, which organism do you think each DNA sample came from?
 
@@ -109,5 +109,5 @@ There are several other output format options that you can use to customize blas
 We can run a simple python script to summarize the blast output by species
 
 ```
-python /scratch/groups/astraigh/biochem_minicourse_2022/straightlab/scripts/summarize_species.py blast/sampleX_tabulated.output.first50.txt blast/sampleX_species_summary.tsv
+python /scratch/groups/astraigh/biochem_minicourse_2022/straightlab/scripts/summarize_species.py blast/sampleX_tabulated.output.first50.tsv blast/sampleX_species_summary.tsv
 ```
