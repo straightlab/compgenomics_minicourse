@@ -29,7 +29,7 @@ cd $me/data/samples
 Create histogram and save it into a file. 
 Replace sampleX with the sample# for your group in both the input fastq file & the output readlength histogram file
 ```
-$me/data/samples/sampleX.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c | sort -k1,1nr > sampleX_readlength.hist.txt
+cat $me/data/samples/sampleX.fastq | awk '(NR%4==2){print length($0)}' | sort | uniq -c | sort -k1,1nr > sampleX_readlength.hist.txt
 
 less sampleX_readlength.hist.txt
 ```
@@ -68,10 +68,10 @@ head -n 100 sampleX.fasta > sampleX.head.fasta
 
 We have multipe databases installed on sherlock, which correspond to some of those available on ncbi blast online. Here, because we know we what type of samples we are dealing with we have downloaded just a few databases and combined them into one blastdb. The path of this database is  
 ```
-/scratch/groups/astraigh/biochem_minicourse_2022/straightlab/blastdb
+/scratch/groups/astraigh/biochem_minicourse_2022/straightlab/blastdb/combined_db
 
 #We can set a variable for this blast database so we don't have to type out the full path eachtime
-export myblastdb=/scratch/groups/astraigh/biochem_minicourse_2022/straightlab/blastdb
+export myblastdb=/scratch/groups/astraigh/biochem_minicourse_2022/straightlab/blastdb/combined_db
 
 ```
 
