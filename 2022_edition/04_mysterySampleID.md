@@ -105,3 +105,9 @@ Based on the blast output, which organism do you think each DNA sample came from
 
 
 There are several other output format options that you can use to customize blast's output. More info here: https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.options_common_to_all_blast/
+
+We can run a simple python script to summarize the blast output by species
+
+```
+python scripts/summarize_species.py blast/sampleX_tabulated.output.first50.txt
+```
