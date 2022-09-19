@@ -99,7 +99,7 @@ blastn -query <(head -n 100 sampleX.fasta) -db $myblastdb -num_threads 2 -subjec
 ```
 Let's sort the output and print the uniq entries
 ```
-cat blast/sampleX_tabulated.output.first50.txt | awk '{print $1,$2,$(NF-1)}' | sort -k3,3 -nr
+cat blast/sampleX_tabulated.output.first50.txt | awk '{print $1,$2,$(NF)}' | sort -k3,3 -nr
 ```
 Based on the blast output, which organism do you think each DNA sample came from?
 
