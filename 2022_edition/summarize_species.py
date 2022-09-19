@@ -15,4 +15,7 @@ if __name__ == '__main__':
     filename = sys.argv[1]
     df = load_data(filename)
     out = species_summary(df)
-    print(out)
+    print(out.head(n=20))
+    if len(args)>1:
+        out.to_csv(sys.argv[2], sep="\t")
+        print('Full data saved to :%s'%sys.argv[2])

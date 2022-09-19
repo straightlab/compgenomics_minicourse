@@ -109,5 +109,5 @@ There are several other output format options that you can use to customize blas
 We can run a simple python script to summarize the blast output by species
 
 ```
-python /scratch/groups/astraigh/biochem_minicourse_2022/straightlab/scripts/summarize_species.py blast/sampleX_tabulated.output.first50.txt
+python /scratch/groups/astraigh/biochem_minicourse_2022/straightlab/scripts/summarize_species.py blast/sampleX_tabulated.output.first50.txt blast/sampleX_species_summary.tsv
 ```
