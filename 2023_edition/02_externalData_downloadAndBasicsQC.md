@@ -20,7 +20,7 @@ We'll download the data within the subfolder `external` within the folder `<your
 
 ```bash
 #recall your folder name & set an environment variable 'me' so you can refer to this folder later
-export me="$GROUP_SCRATCH/biochem_minicourse_2022/<your_dir>"
+export me="$GROUP_SCRATCH/biochem_minicourse_2023/<your_dir>"
 
 #move to the folder for this dataset
 cd $me/data/external
@@ -29,7 +29,7 @@ cd $me/data/external
 Note: the following command takes a bit of time, so we've already downloaded the file into our directory. Use the cp command to copy from our dir to yours (this is the first 100000 lines from the full fastq file).
 fasterq-dump SRR13403380 --progress --threads 2 --temp $me/tmp --outdir $me/data/external
 
-cp $GROUP_SCRATCH/biochem_minicourse_2022/straightlab/data/external/SRR13403380_subset.fastq ./ 
+cp $GROUP_SCRATCH/biochem_minicourse_2023/straightlab/data/external/SRR13403380_subset.fastq ./ 
 ```
 
 Let's do some quick inspection of the data we downloaded.
@@ -71,7 +71,7 @@ wc -l SRR13403380_subset.fastq
 # 100000/4 = 250000 reads
 
 #we can do the same for the full file
-wc -l /scratch/groups/astraigh/biochem_minicourse_2022/straightlab/data/external/SRR13403380.fastq
+wc -l /scratch/groups/astraigh/biochem_minicourse_2023/straightlab/data/external/SRR13403380.fastq
 ```
 
 What is the length of each read? We need to count the number of characters for each sequence line. First let's  extract the sequences from the file. `awk` is a great unix program to manipulate text files line by line. Here we just filter lines with a number modulo 4 = 2 (line numbers divided by 4 that give a remainder of 2). 
@@ -117,7 +117,7 @@ This produced an html file, which we need to download to our computer to look at
 Open a new terminal tab in your computer, and then run 
 ```
 # replace <straightlab> with your folder name, and replace ~/Downloads if necessary
-rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2022/<straightlab>/data/external/SRR13403380_subset_fastqc.html ~/Downloads
+rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2023/<straightlab>/data/external/SRR13403380_subset_fastqc.html ~/Downloads
 
 ```
 The command has the form `rsync <option flags> [source path] [destination path]`.  The optional flags `-vh` and `--progress` are just to tune the behavior of rsync and tell it to display progress in a nice way and `-a` is to preserve timestamps on files. 
