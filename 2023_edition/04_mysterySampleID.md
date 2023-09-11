@@ -33,22 +33,19 @@ cat $me/data/samples/sampleX.fastq | awk '(NR%4==2){print length($0)}' | sort | 
 
 less sampleX_readlength.hist.txt
 ```
-Using FastQC
-```
-fastqc $me/data/samples/sampleX.fastq -t 2 
-```
-Transfer the output file to the Downloads folder on your computer. Be sure to change the directory to match your fastqc output.
-```
-rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2023/<your_dir>/data/samples/sampleX_fastqc.html ~/Downloads
-```
-Run on your local terminal:
-```
-open ~/Dowloads/sampleX_fastqc.html
-```
+
+
 #Using Nanostat
+We used FastQC earlier to get some qc metrics, but we're now working with long read data, and thus we'll only use NanoStat for metrics.
 ```
 NanoStat --fastq $me/data/samples/sampleX.fastq -n sampleX_nanostat.summary
 ```
+Transfer the output file to the Downloads folder on your computer. Run this command on your local terminal.
+```
+rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2023/<your_dir>/data/samples/sampleX_nanostat.summary ~/Downloads
+```
+Open the file using your text edit application.
+
 
 ## Blast
 
