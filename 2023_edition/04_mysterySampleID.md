@@ -34,8 +34,8 @@ cat $me/data/samples/sampleX.fastq | awk '(NR%4==2){print length($0)}' | sort | 
 less sampleX_readlength.hist.txt
 ```
 
-
 ## Using Nanostat
+
 We used FastQC earlier to get some qc metrics, but we're now working with long read data, and thus we'll only use NanoStat for metrics.
 ```
 NanoStat --fastq $me/data/samples/sampleX.fastq -n sampleX_nanostat.summary
