@@ -35,7 +35,7 @@ less sampleX_readlength.hist.txt
 ```
 
 
-##Using Nanostat
+## Using Nanostat
 We used FastQC earlier to get some qc metrics, but we're now working with long read data, and thus we'll only use NanoStat for metrics.
 ```
 NanoStat --fastq $me/data/samples/sampleX.fastq -n sampleX_nanostat.summary
