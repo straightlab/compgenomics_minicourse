@@ -26,7 +26,7 @@ ssh <username>@login.sherlock.stanford.edu
 ## Setting up our workspace for the project.
 Go to the group minicourse directory
 ```
-cd $GROUP_SCRATCH/biochem_minicourse_2024
+cd $GROUP_SCRATCH/biochem_minicourse_2025
 ```
 Note that `$GROUP_SCRATCH` is a bash variable, which contains the path to a default "scratch" folder for our lab. You can see the content of this variable with
 ```
@@ -110,7 +110,7 @@ For this bootcamp, we are going to request 2 cpus each for 3h.
 `salloc -p astraigh --time=03:00:00 --cpus-per-task=2`
 
 You should quickly get a prompt that looks like that `salloc: Pending job allocation <ID>` 
-Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/biochem_minicourse_2022/<your_dir_name>]$
+Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/biochem_minicourse_2025/<your_dir_name>]$
 This shell is running on a dedicated computational node (here sh02-09n13). Within this shell, you'll have access to 2 CPUS and 32 GB of RAM.
 
 This computational node is part of the partition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, refer to the Sherlock documentation.
