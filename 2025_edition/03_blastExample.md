@@ -27,11 +27,11 @@ We have multipe databases installed on sherlock, which correspond to some of tho
 /scratch/groups/astraigh/biochem_minicourse_2025/straightlab/blastdb/combined_db
 ```
 
-Let's run blast using this database. We will put the blast output in a `blast` folder
+Let's run blast using this database. We will put the blast output in a `blast` folder (put the blast folder in the subdirectory external)
 
 ```bash
 #create folder for output
-mkdir -p blast
+mkdir -p $me/data/external/blast
 
 #we can set a variable for this blast database so we don't have to type out the full path everytime
 myblastdb=/scratch/groups/astraigh/biochem_minicourse_2025/straightlab/blastdb/combined_db
