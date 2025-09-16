@@ -8,7 +8,7 @@ Oxford Nanopore sequencers output the raw data in fast5 format. Fast5s contain t
 
 ```bash
 #recall your folder name
-export me=$GROUP_SCRATCH/biochem_minicourse_2024/<your_dir>
+export me=$GROUP_SCRATCH/biochem_minicourse_2025/<your_dir>
 
 #Go to your data folder we created earlier & create subfolders that the fastq files will go in. Change sampleX to your sample number.
 
@@ -17,9 +17,9 @@ mkdir sampleX
 ```
 Copy the data for your sample from the straightlab folder. Change sampleX to your sample number (ie. sample3). Repeat this for each sample number for your group. 
 
-In the directory $GROUP_SCRATCH/biochem_minicourse_2024/straightlab/data/samples, there are files for both sample2.fastq/sample6.fastq and sample2_full.fastq/sample6_full.fastq. Samples 2 and 6 have very long reads (on the order of 1000s of kbs), so we had to cut the readlength to 1000bp to make it run faster. The sample2.fastq/sample6.fastq files are actually capped at 1000bp reads, and the "full" files contain all the reads. We had to cut down these samples because Blast is a local alignment tool, and is not built for parsing super long reads. In general, if you're simply trying to identify the source of a sample, you probably don't need to blast super long reads to do so, as it would be a waste of time & computational resources. 
+In the directory $GROUP_SCRATCH/biochem_minicourse_2025/straightlab/data/samples, there are files for both sample2.fastq/sample6.fastq and sample2_full.fastq/sample6_full.fastq. Samples 2 and 6 have very long reads (on the order of 1000s of kbs), so we had to cut the readlength to 1000bp to make it run faster. The sample2.fastq/sample6.fastq files are actually capped at 1000bp reads, and the "full" files contain all the reads. We had to cut down these samples because Blast is a local alignment tool, and is not built for parsing super long reads. In general, if you're simply trying to identify the source of a sample, you probably don't need to blast super long reads to do so, as it would be a waste of time & computational resources. 
 ```
-cp $GROUP_SCRATCH/biochem_minicourse_2024/straightlab/data/samples/sampleX.fastq $me/data/samples
+cp $GROUP_SCRATCH/biochem_minicourse_2025/straightlab/data/samples/sampleX.fastq $me/data/samples
 ```
 
 ## BasicQC
@@ -44,7 +44,7 @@ NanoStat --fastq $me/data/samples/sampleX.fastq -n sampleX_nanostat.summary
 ```
 Transfer the output file to the Downloads folder on your computer. Run this command on your local terminal.
 ```
-rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2024/<your_dir>/data/samples/sampleX_nanostat.summary ~/Downloads
+rsync -ah --progress <username>@dtn.sherlock.stanford.edu:/scratch/groups/astraigh/biochem_minicourse_2025/<your_dir>/data/samples/sampleX_nanostat.summary ~/Downloads
 ```
 Open the file using your text edit application.
 
@@ -67,10 +67,10 @@ head -n 100 sampleX.fasta > sampleX.head.fasta
 
 We have multipe databases installed on sherlock, which correspond to some of those available on ncbi blast online. Here, because we know we what type of samples we are dealing with we have downloaded just a few databases and combined them into one blastdb. The path of this database is  
 ```
-/scratch/groups/astraigh/biochem_minicourse_2024/straightlab/blastdb/combined_db
+/scratch/groups/astraigh/biochem_minicourse_2025/straightlab/blastdb/combined_db
 
 #We can set a variable for this blast database so we don't have to type out the full path eachtime
-export myblastdb=/scratch/groups/astraigh/biochem_minicourse_2024/straightlab/blastdb/combined_db
+export myblastdb=/scratch/groups/astraigh/biochem_minicourse_2025/straightlab/blastdb/combined_db
 
 ```
 
@@ -108,5 +108,5 @@ There are several other output format options that you can use to customize blas
 We can run a simple python script to summarize the blast output by species
 
 ```
-python /scratch/groups/astraigh/biochem_minicourse_2024/straightlab/scripts/summarize_species.py blast/sampleX_sort.output.first50.tsv blast/sampleX_species_summary.tsv
+python /scratch/groups/astraigh/biochem_minicourse_2025/straightlab/scripts/summarize_species.py blast/sampleX_sort.output.first50.tsv blast/sampleX_species_summary.tsv
 ```
