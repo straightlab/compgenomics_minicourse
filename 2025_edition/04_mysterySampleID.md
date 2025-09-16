@@ -17,7 +17,7 @@ mkdir sampleX
 ```
 Copy the data for your sample from the straightlab folder. Change sampleX to your sample number (ie. sample3). Repeat this for each sample number for your group. 
 
-In the directory $GROUP_SCRATCH/biochem_minicourse_2025/straightlab/data/samples, there are files for both sample2.fastq/sample6.fastq and sample2_full.fastq/sample6_full.fastq. Samples 2 and 6 have very long reads (on the order of 1000s of kbs), so we had to cut the readlength to 1000bp to make it run faster. The sample2.fastq/sample6.fastq files are actually capped at 1000bp reads, and the "full" files contain all the reads. We had to cut down these samples because Blast is a local alignment tool, and is not built for parsing super long reads. In general, if you're simply trying to identify the source of a sample, you probably don't need to blast super long reads to do so, as it would be a waste of time & computational resources. 
+In the directory $GROUP_SCRATCH/biochem_minicourse_2025/straightlab/data/samples, there are files for both sample2.fastq and sample2_1000bpmax.fastq. Sample 2 has very long reads (on the order of 1000s of kbs), so we had to cut the readlength to 1000bp to make it run faster. The sample2.fastq file is the full file so don't cp that over. The file you should copy if you have sample 2 is sample2_1000bpmax.fastq. We had to cut down these samples because Blast is a local alignment tool, and is not built for parsing super long reads. In general, if you're simply trying to identify the source of a sample, you probably don't need to blast super long reads to do so, as it would be a waste of time & computational resources. 
 ```
 cp $GROUP_SCRATCH/biochem_minicourse_2025/straightlab/data/samples/sampleX.fastq $me/data/samples
 ```
