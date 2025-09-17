@@ -10,10 +10,7 @@ Oxford Nanopore sequencers output the raw data in fast5 format. Fast5s contain t
 #recall your folder name
 export me=$GROUP_SCRATCH/biochem_minicourse_2025/<your_dir>
 
-#Go to your data folder we created earlier & create subfolders that the fastq files will go in. Change sampleX to your sample number.
 
-cd $me/data
-mkdir sampleX
 ```
 Copy the data for your sample from the straightlab folder. Change sampleX to your sample number (ie. sample3). Repeat this for each sample number for your group. 
 
