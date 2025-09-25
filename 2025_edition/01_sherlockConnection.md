@@ -74,6 +74,27 @@ Verify the tree structure with
 tree .
 ```
 
+Finally, please grant read/write/execute access to your directory to everyone in the group (this will be important after the minicourse, for when we need to delete the files we generate today). Any directories you make in Sherlock will automatically grant read/execute access to everyone, but only the creator of the directory will have write access.  Read access means someone can "read" the file, execute access means someone can run a program with the file, and write access means someone can edit (or delete) the file. When we type:
+
+```bash
+ls -l .
+```
+
+This will display the permissions for the directory you are currently in, which should look like this: drwxr-sr-x. "d" stands for directory, and that's followed by the read/write/execute (rwx or rws) permissions for the directory owner, the group members (of astraigh), and anyone who uses Sherlock (in that order). 
+
+To change permissions on a directory or file, you need to use the "chmod" command. This command is then followed by "-R" to indicate we want to change permissions recursively (for every file/directory nested within a certain directory). Then, the numerical value below is an "octal value" that represents what permissions you want to grant to the directory owner, group, and everyone. Check out this article for more details on where the numbers come from: https://www.redhat.com/en/blog/manage-permissions. Type the following: 
+
+```bash
+chmod -R 775 $GROUP_SCRATCH/biochem_minicourse_2025/<your_directory>
+```
+
+Now, when you type 
+```bash
+ls -l .
+```
+
+The permissions should read: drwxrwsr-x
+
 ## Running persistent / recoverable sessions with Gnu Screen
 
 What happens if I am in the middle of some task on Sherlock and I lose internet connection or close my computer? To avoid having to go back to square one, we need to set up a persistent bash session. The standard way to do this is using a window manager such as GNU Screen.
