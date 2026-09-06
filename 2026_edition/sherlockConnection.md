@@ -27,7 +27,7 @@ ssh <username>@login.sherlock.stanford.edu
 ## Setting up our workspace for the project.
 Go to the group minicourse directory
 ```
-cd $GROUP_SCRATCH/biochem_minicourse_2025
+cd $GROUP_SCRATCH/biochem_minicourse_2026
 ```
 Note that `$GROUP_SCRATCH` is a bash variable, which contains the path to a default "scratch" folder for our lab. You can see the content of this variable with
 ```
