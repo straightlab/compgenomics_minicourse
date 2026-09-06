@@ -34,7 +34,7 @@ Note that `$GROUP_SCRATCH` is a bash variable, which contains the path to a defa
 echo $GROUP_SCRATCH
 ```
 
-Make a new folder for yourself, and move to that folder. For example for team Straight
+Make a new folder for yourself, and move to that folder.
 ```
 mkdir <your_dir_name>
 cd <your_dir_name>
@@ -86,7 +86,7 @@ This will display the permissions for the directory you are currently in, which 
 To change permissions on a directory or file, you need to use the "chmod" command. This command is then followed by "-R" to indicate we want to change permissions recursively (for every file/directory nested within a certain directory). Then, the numerical value below is an "octal value" that represents what permissions you want to grant to the directory owner, group, and everyone. Check out this article for more details on where the numbers come from: https://www.redhat.com/en/blog/manage-permissions. Type the following: 
 
 ```bash
-chmod -R 775 $GROUP_SCRATCH/biochem_minicourse_2025/<your_directory>
+chmod -R 775 $GROUP_SCRATCH/biochem_minicourse_2026/<your_directory>
 ```
 
 Now, when you type 
@@ -132,7 +132,7 @@ For this bootcamp, we are going to request 2 cpus each for 3h.
 `salloc -p astraigh --time=03:00:00 --cpus-per-task=2`
 
 You should quickly get a prompt that looks like that `salloc: Pending job allocation <ID>` 
-Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/biochem_minicourse_2025/<your_dir_name>]$
+Your command line will then read: [username@sh02-09n13 /scratch/groups/astraigh/biochem_minicourse_2026/<your_dir_name>]$
 This shell is running on a dedicated computational node (here sh02-09n13). Within this shell, you'll have access to 2 CPUS and 32 GB of RAM.
 
 This computational node is part of the partition `astraigh` (specificed by the `-p astraigh` flag) which is reserved for our lab. There are other partitions you can use, refer to the Sherlock documentation.
