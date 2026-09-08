@@ -20,7 +20,7 @@ We'll download the data within the subfolder `external` within the folder `<your
 
 ```bash
 #recall your folder name & set an environment variable 'me' so you can refer to this folder later
-export me="$GROUP_SCRATCH/biochem_minicourse_2025/<your_dir>"
+export me="$GROUP_SCRATCH/biochem_minicourse_2026/<your_dir>"
 
 #move to the folder for this dataset
 cd $me/data/external
