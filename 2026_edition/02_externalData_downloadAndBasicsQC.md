@@ -20,7 +20,7 @@ We'll download the data within the subfolder `external` within the folder `<your
 
 ```bash
 #recall your folder name & set an environment variable 'me' so you can refer to this folder later
-export me="$GROUP_SCRATCH/biochem_minicourse_2025/<your_dir>"
+export me="$GROUP_SCRATCH/biochem_minicourse_2026/<your_dir>"
 
 #move to the folder for this dataset
 cd $me/data/external
@@ -29,7 +29,7 @@ cd $me/data/external
 Note: the following command takes a bit of time, so we've already downloaded the file into our directory. Use the cp command to copy from our dir to yours (this is the first 100000 lines from the full fastq file).
 fasterq-dump SRR13403380 --progress --threads 2 --temp $me/tmp --outdir $me/data/external
 
-cp $GROUP_SCRATCH/biochem_minicourse_2025/straightlab/data/external/SRR13403380_subset.fastq ./ 
+cp $GROUP_SCRATCH/biochem_minicourse_2026/straightlab/data/external/SRR13403380_subset.fastq ./ 
 ```
 
 Let's do some quick inspection of the data we downloaded.
